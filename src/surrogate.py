@@ -166,12 +166,15 @@ n_conc = 101
 
 class KelpNN(Surrogate):
     def __init__(self, model_name=None):
-        diurnal_model, model, encoder, decoder = build_model(num_blocks, num_layers, latent_size, compressed_species, dropout, runnum, n_steps)
+        diurnal_model, self.integrator, self.encoder, self.decoder = build_model(num_blocks, num_layers, latent_size, compressed_species, dropout, runnum, n_steps)
         if model_name is not None:
-            model.load_weights('weights/Model' + model_name)
-            encoder.load_weights('weights/Encoder' + model_name)
-            decoder.load_weights('weights/Decoder' + model_name)
+            self.load_weights(model_name)
         super().__init__(diurnal_model)
+
+    def load_weights(self, model_name):
+        self.integrator.load_weights('weights/Model' + model_name)
+        self.encoder.load_weights('weights/Encoder' + model_name)
+        self.decoder.load_weights('weights/Decoder' + model_name)
 
     def fit(self, X, y):
         pass

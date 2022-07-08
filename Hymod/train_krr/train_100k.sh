@@ -1,0 +1,1 @@
+sbatch --array=0-8 train_100k.sbatch
