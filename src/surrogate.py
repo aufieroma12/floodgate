@@ -1,3 +1,4 @@
+import os
 import numpy as np
 from abc import ABC, abstractmethod
 
@@ -10,10 +11,20 @@ from sklearn.model_selection import GridSearchCV
 from SAFEpython.model_execution import model_execution # module to execute the model
 from SAFEpython import HyMod
 
+import tensorflow.compat.v1 as tf
+from tensorflow.keras.callbacks import ModelCheckpoint
+import pickle
+from build_nn import build_model
+
+
 def batched(batch_size):
     def f_batched(f):
         def wrapper(*args, **kwargs):
-            X = args[1]
+            inputs = args[1]
+            if isinstance(inputs, tuple):
+                X, met = inputs
+            else:
+                X = inputs
             n = X.shape[0]
             if n <= batch_size:
                 return f(*args, **kwargs)
@@ -21,10 +32,14 @@ def batched(batch_size):
                 y_preds = []
                 for i in range(n // batch_size + (n % batch_size > 0)):
                     X_batch = X[i*batch_size:(i+1)*batch_size]
+                    if isinstance(inputs, tuple):
+                        met_batch = met[i*batch_size:(i+1)*batch_size]
+                        X_batch = (X_batch, met_batch)
                     y_preds.append(f(args[0], X_batch))
                 return np.concatenate(y_preds, axis=0)
         return wrapper
     return f_batched
+
 
 
 class Surrogate(ABC):
@@ -70,6 +85,7 @@ class LinReg(Surrogate):
     def predict(self, X):
         return self.model.predict(X)
     
+
 
 class PolyReg(Surrogate):
     def __init__(self, degree):
@@ -136,6 +152,40 @@ class KNNcv(Surrogate):
 
 
 
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+
+#Hyperparameter Tuning (mkelp)
+num_blocks = 2
+num_layers = 4
+latent_size = 256
+compressed_species = 16
+dropout = 0.35
+runnum = 1
+n_steps = 3
+n_conc = 101
+
+class KelpNN(Surrogate):
+    def __init__(self, model_name=None):
+        diurnal_model, model, encoder, decoder = build_model(num_blocks, num_layers, latent_size, compressed_species, dropout, runnum, n_steps)
+        if model_name is not None:
+            model.load_weights('weights/Model' + model_name)
+            encoder.load_weights('weights/Encoder' + model_name)
+            decoder.load_weights('weights/Decoder' + model_name)
+        super().__init__(diurnal_model)
+
+    def fit(self, X, y):
+        pass
+
+    @batched(2.5e4)
+    def predict(self, inputs):
+        X, met = inputs
+        X = tf.expand_dims(X, 1)
+        noise = tf.zeros((X.shape[0], n_steps-1, n_conc), dtype=X.dtype)
+        X = tf.concat([X, noise], 1)
+        full_pred = self.model.predict(x=[X, met, noise], steps=1)[-1]
+        y_preds = full_pred[:,-1,10]
+
+        return y_preds
 
 
 
