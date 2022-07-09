@@ -7,3 +7,9 @@ KRR_hyperparams = {
 	50000: (np.logspace(-12, -10, 3), np.logspace(-4, -2, 3))
 	100000: (np.logspace(-12, -10, 3), np.logspace(-4, -2, 3))
 }
+
+Hymod_inputs = {
+	"labels": ['Sm', 'beta', 'alfa', 'Rs', 'Rf'],
+	"min": np.array([0, 0, 0, 0, 0.1]),
+	"max": np.array([400, 2, 1, 0.1, 1])
+}

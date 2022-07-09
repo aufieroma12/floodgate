@@ -57,7 +57,7 @@ class Surrogate(ABC):
 
 
 class Hymod(Surrogate):
-    def __init__(self, obsPath="../../data/inputs/forcings/LeafCatch.txt"):
+    def __init__(self, obsPath="../Hymod/data/inputs/LeafCatch.txt"):
         # Observed inputs and outputs
         data = np.genfromtxt(obsPath, comments='%')
         rain = data[0:365, 0] # 2-year simulation
