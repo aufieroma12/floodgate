@@ -31,8 +31,8 @@ start = index * num_datasets
 end = (index + 1) * num_datasets
 
 # Input ranges
-xmin = Hymod_inputs.min
-xmax = Hymod_inputs.max
+xmin = Hymod_inputs['min']
+xmax = Hymod_inputs['max']
 d = xmax.shape[0]
 
 sample_sizes = [100, 250, 500, 1000, 5000, 10000, 50000]
@@ -42,7 +42,7 @@ data_path = '../data/outputs/{}.npy'
 model_path = f'../models/n_{train_size}'
 output_dir = '../data/analysis/{}/'
 if not os.path.exists(output_dir):
-    os.mkdir(output_dir)
+    os.makedirs(output_dir)
     os.mkdir(output_dir.format('floodgate'))
     os.mkdir(output_dir.format('surrogate_spf'))
     os.mkdir(output_dir.format('panin'))
@@ -64,7 +64,7 @@ for i in range(start, end):
         print(f"  Total model evalutations ({n_max}): {(time() - t1): .2f} seconds")
         
         if args.save_data:
-            np.save(data_path.format(i), np.concatenate((X,y), axis=1))
+            np.save(data_path.format(i), np.concatenate((X,y.reshape(-1,1)), axis=1))
 
     print(f'  Train size: {train_size}')
     floodgate_results = []

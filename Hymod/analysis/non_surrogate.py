@@ -4,11 +4,12 @@ import argparse
 import os
 
 import sys
-sys.path.append('../../')
+sys.path.append('../../src')
+sys.path.append('../../config')
 
-from src.sensitivity import SPF
-from src.surrogate import Hymod
-from config.config import Hymod_inputs
+from sensitivity import SPF
+from surrogate import Hymod
+from config import Hymod_inputs
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--num_datasets", type=int, required=True, help="Number of datasets to evaluate.")
@@ -23,8 +24,8 @@ start = index * num_datasets
 end = (index + 1) * num_datasets
 
 # Input ranges
-xmin = Hymod_inputs.min
-xmax = Hymod_inputs.max
+xmin = Hymod_inputs['min']
+xmax = Hymod_inputs['max']
 d = xmax.shape[0]
 
 sample_sizes = [100, 250, 500, 1000, 5000, 10000, 50000]
@@ -33,9 +34,9 @@ n_max = sample_sizes[-1] # Total number of samples
 data_path = '../data/outputs/{}.npy'
 output_dir = '../data/analysis/spf/'
 if not os.path.exists(output_dir):
-    os.mkdir(output_dir)
+    os.makedirs(output_dir)
 
-fstar = Hymod()
+fstar = Hymod(obsPath="../data/inputs/LeafCatch.txt")
 
 for i in range(start, end):
     print(f'Evaluating dataset {i}:')
@@ -51,7 +52,7 @@ for i in range(start, end):
         print(f"  Total model evalutations ({n_max}): {(time() - t1): .2f} seconds")
         
         if args.save_data:
-            np.save(data_path.format(i), np.concatenate((X,y), axis=1))
+            np.save(data_path.format(i), np.concatenate((X,y.reshape(-1,1)), axis=1))
 
     results = []
     print("  Analysis:")

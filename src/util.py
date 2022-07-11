@@ -8,16 +8,16 @@ def get_knockoffs(inputs, X_ind, xmin, xmax, K):
 		X = inputs
 
 	n, d = X.shape
-	ind_full = list(np.arange(d))
+	ind = list(np.arange(d))
 	Z_ind = ind[:X_ind] + ind[(X_ind+1):]
-        
-    knockoffs = np.zeros(((n*K), d))
-    knockoffs[:,X_ind] = np.random.rand(n*K) * (xmax[X_ind] - xmin[X_ind]) + xmin[X_ind]
-    for i in range(n):
-        knockoffs[(i*K):((i+1)*K),Z_ind] = X[i, Z_ind]
-    if isinstance(inputs, tuple):
-    	for i in range(n):
-        	met_new[(i*K):((i+1)*K),:] = met[i,:,:]
-        knockoffs = (knockoffs, met_new)
-        
-    return knockoffs
+
+	knockoffs = np.zeros(((n*K), d))
+	knockoffs[:,X_ind] = np.random.rand(n*K) * (xmax[X_ind] - xmin[X_ind]) + xmin[X_ind]
+	for i in range(n):
+		knockoffs[(i*K):((i+1)*K),Z_ind] = X[i, Z_ind]
+	if isinstance(inputs, tuple):
+		for i in range(n):
+			met_new[(i*K):((i+1)*K),:] = met[i,:,:]
+		knockoffs = (knockoffs, met_new)
+
+	return knockoffs
