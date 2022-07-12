@@ -22,12 +22,12 @@ output_dir = '../data/analysis/'
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
-fstar = Hymod(obsPath="../data/inputs/LeafCatch.txt")
+fstar = Hymod()
 X = np.random.rand(n, d) @ np.diag(xmax - xmin) + np.ones((n, d)) @ np.diag(xmin)
 
 t1 = time()
-results = SPF(X, fstar, xmin, xmax)
+results = SPF(X, fstar, xmin, xmax, alpha=1)
 print(f"Total model evalutations ({n * (d + 1)}): {(time() - t1): .2f} seconds")
 
-np.save(output_dir + f'ground_truth.npy', results)
+np.save(output_dir + 'ground_truth.npy', results)
 
