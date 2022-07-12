@@ -8,13 +8,18 @@ from sklearn.kernel_ridge import KernelRidge
 from sklearn.neighbors import KNeighborsRegressor as KNN
 from sklearn.model_selection import GridSearchCV
 
-from SAFEpython.model_execution import model_execution # module to execute the model
-from SAFEpython import HyMod
-
 import tensorflow.compat.v1 as tf
 from tensorflow.keras.callbacks import ModelCheckpoint
 import pickle
+
+from SAFEpython.model_execution import model_execution # module to execute the model
+from SAFEpython import HyMod
+
 from build_nn import build_model
+
+import sys
+sys.path.append("../config/")
+from config import BASE_DIR, Hymod_inputs
 
 
 def batched(batch_size):
@@ -57,7 +62,7 @@ class Surrogate(ABC):
 
 
 class Hymod(Surrogate):
-    def __init__(self, obsPath="../Hymod/data/inputs/LeafCatch.txt"):
+    def __init__(self, obsPath=Hymod_inputs["FORCING_PATH"]):
         # Observed inputs and outputs
         data = np.genfromtxt(obsPath, comments='%')
         rain = data[0:365, 0] # 2-year simulation
@@ -172,9 +177,9 @@ class KelpNN(Surrogate):
         super().__init__(diurnal_model)
 
     def load_weights(self, model_name):
-        self.integrator.load_weights('weights/Model' + model_name)
-        self.encoder.load_weights('weights/Encoder' + model_name)
-        self.decoder.load_weights('weights/Decoder' + model_name)
+        self.integrator.load_weights(model_name.format('Model'))
+        self.encoder.load_weights(model_name.format('Encoder'))
+        self.decoder.load_weights(model_name.format('Decoder'))
 
     def fit(self, X, y):
         pass

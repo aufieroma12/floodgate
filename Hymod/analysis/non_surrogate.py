@@ -31,17 +31,17 @@ d = xmax.shape[0]
 sample_sizes = [100, 250, 500, 1000, 5000, 10000, 50000]
 n_max = sample_sizes[-1] # Total number of samples
 
-data_path = '../data/outputs/{}.npy'
-output_dir = '../data/analysis/spf/'
-if not os.path.exists(output_dir):
-    os.makedirs(output_dir)
+DATA_PATH = '../data/outputs/{}.npy'
+OUTPUT_DIR = '../data/analysis/spf/'
+if not os.path.exists(OUTPUT_DIR):
+    os.makedirs(OUTPUT_DIR)
 
 fstar = Hymod(obsPath="../data/inputs/LeafCatch.txt")
 
 for i in range(start, end):
     print(f'Evaluating dataset {i}:')
-    if os.path.exists(data_path.format(i)):
-        data = np.load(data_path.format(i))
+    if os.path.exists(DATA_PATH.format(i)):
+        data = np.load(DATA_PATH.format(i))
         X = data[:,:-1]
         y = data[:,-1]
         print("  Data read from file.\n")
@@ -52,7 +52,7 @@ for i in range(start, end):
         print(f"  Total model evalutations ({n_max}): {(time() - t1): .2f} seconds")
         
         if args.save_data:
-            np.save(data_path.format(i), np.concatenate((X,y.reshape(-1,1)), axis=1))
+            np.save(DATA_PATH.format(i), np.concatenate((X,y.reshape(-1,1)), axis=1))
 
     results = []
     print("  Analysis:")
@@ -67,6 +67,6 @@ for i in range(start, end):
         print(f'    N={N}: {time() - t1: .3f} seconds')
         
     results = np.array(results)
-    np.save(output_dir + f'{i}.npy', results)
+    np.save(OUTPUT_DIR + f'{i}.npy', results)
 
     print('')

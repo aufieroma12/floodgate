@@ -38,22 +38,22 @@ d = xmax.shape[0]
 sample_sizes = [100, 250, 500, 1000, 5000, 10000, 50000]
 n_max = sample_sizes[-1] # Total number of samples
 
-data_path = '../data/outputs/{}.npy'
-model_path = f'../models/n_{train_size}'
-output_dir = '../data/analysis/{}/'
-if not os.path.exists(output_dir):
-    os.makedirs(output_dir)
-    os.mkdir(output_dir.format('floodgate'))
-    os.mkdir(output_dir.format('surrogate_spf'))
-    os.mkdir(output_dir.format('panin'))
+DATA_PATH = '../data/outputs/{}.npy'
+MODEL_PATH = f'../models/n_{train_size}'
+OUTPUT_DIR = '../data/analysis/{}/'
+if not os.path.exists(OUTPUT_DIR):
+    os.makedirs(OUTPUT_DIR)
+    os.mkdir(OUTPUT_DIR.format('floodgate'))
+    os.mkdir(OUTPUT_DIR.format('surrogate_spf'))
+    os.mkdir(OUTPUT_DIR.format('panin'))
 
 fstar = Hymod()
-f = joblib.load(model_path)
+f = joblib.load(MODEL_PATH)
 
 for i in range(start, end):
     print(f'Evaluating dataset {i}:')
-    if os.path.exists(data_path.format(i)):
-        data = np.load(data_path.format(i))
+    if os.path.exists(DATA_PATH.format(i)):
+        data = np.load(DATA_PATH.format(i))
         X = data[:,:-1]
         y = data[:,-1]
         print("  Data read from file.\n")
@@ -64,7 +64,7 @@ for i in range(start, end):
         print(f"  Total model evalutations ({n_max}): {(time() - t1): .2f} seconds")
         
         if args.save_data:
-            np.save(data_path.format(i), np.concatenate((X,y.reshape(-1,1)), axis=1))
+            np.save(DATA_PATH.format(i), np.concatenate((X,y.reshape(-1,1)), axis=1))
 
     print(f'  Train size: {train_size}')
     floodgate_results = []
@@ -87,8 +87,8 @@ for i in range(start, end):
     spf_results = np.array(spf_results)
     panin_results = np.array(panin_results)
 
-    np.save(output_dir.format('floodgate') + f'{train_size}tr_{i}.npy', floodgate_results)
-    np.save(output_dir.format('surrogate_spf') + f'{train_size}tr_{i}.npy', spf_results)
-    np.save(output_dir.format('panin') + f'{train_size}tr_{i}.npy', panin_results)
+    np.save(OUTPUT_DIR.format('floodgate') + f'{train_size}tr_{i}.npy', floodgate_results)
+    np.save(OUTPUT_DIR.format('surrogate_spf') + f'{train_size}tr_{i}.npy', spf_results)
+    np.save(OUTPUT_DIR.format('panin') + f'{train_size}tr_{i}.npy', panin_results)
 
     print('')
