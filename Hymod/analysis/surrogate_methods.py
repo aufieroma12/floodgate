@@ -40,12 +40,11 @@ n_max = sample_sizes[-1] # Total number of samples
 
 DATA_PATH = '../data/outputs/{}.npy'
 MODEL_PATH = f'../models/n_{train_size}'
-OUTPUT_DIR = '../data/analysis/{}/'
-if not os.path.exists(OUTPUT_DIR):
-    os.makedirs(OUTPUT_DIR)
-    os.mkdir(OUTPUT_DIR.format('floodgate'))
-    os.mkdir(OUTPUT_DIR.format('surrogate_spf'))
-    os.mkdir(OUTPUT_DIR.format('panin'))
+OUTPUT_DIR = '../data/analysis/{}/{}/'
+
+os.makedirs(OUTPUT_DIR.format('floodgate', train_size))
+os.makedirs(OUTPUT_DIR.format('spf_surrogate', train_size))
+os.makedirs(OUTPUT_DIR.format('panin', train_size))
 
 fstar = Hymod()
 f = joblib.load(MODEL_PATH)
@@ -87,8 +86,8 @@ for i in range(start, end):
     spf_results = np.array(spf_results)
     panin_results = np.array(panin_results)
 
-    np.save(OUTPUT_DIR.format('floodgate') + f'{train_size}tr_{i}.npy', floodgate_results)
-    np.save(OUTPUT_DIR.format('surrogate_spf') + f'{train_size}tr_{i}.npy', spf_results)
-    np.save(OUTPUT_DIR.format('panin') + f'{train_size}tr_{i}.npy', panin_results)
+    np.save(OUTPUT_DIR.format('floodgate', train_size) + f'{i}.npy', floodgate_results)
+    np.save(OUTPUT_DIR.format('spf_surrogate', train_size) + f'{i}.npy', spf_results)
+    np.save(OUTPUT_DIR.format('panin', train_size) + f'{i}.npy', panin_results)
 
     print('')

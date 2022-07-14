@@ -1,0 +1,135 @@
+import numpy as np
+import pandas as pd
+from matplotlib import pyplot as plt
+import os
+
+import sys
+sys.path.append('../')
+
+from config.config import Hymod_inputs
+
+
+FIG_DIR = '../figs/'
+DATA_DIR = '../Hymod/data/analysis/{}/{}/'
+
+sample_sizes = [100, 250, 500, 1000, 5000, 10000, 50000]
+X_labels = Hymod_inputs['labels']
+d = len(X_labels)
+gt = np.load(DATA_DIR.format('.','.') + 'ground_truth.npy')
+
+fig, ax = plt.subplots(2, 5, figsize=(25,10))
+
+floodgate = []
+spf = []
+spf_surrogate = []
+
+# Floodgate, high-quality surrogate
+for fp in os.listdir(DATA_DIR.format('floodgate', '100000')):
+	floodgate.append(np.load(fp))
+floodgate = np.array(floodgate)
+floodgate_mean = np.mean(floodgate, axis=0)
+floodgate_cov = np.mean((floodgate[:,:,:,0] < gt) * (floodgate[:,:,:,1] > gt), axis=0)
+
+for i in range(d):
+    ax[0,i].plot(sample_sizes, floodgate_mean[:,i,0], color='green', ls='-', label='Floodgate')
+    ax[0,i].plot(sample_sizes, floodgate_mean[:,i,1], color='green', ls='-')
+    ax[1,i].plot(sample_sizes, floodgate_cov[:,i], color='green', alpha=0.6, ls='-')
+
+ax[0,2].plot([0], [20], color='grey', ls='--', label='Low-quality $f$')
+
+# Non-surrogate SPF
+for fp in os.listdir(DATA_DIR.format('spf', '.')):
+	spf.append(np.load(fp))
+spf = np.array(spf)
+spf_mean = np.mean(spf, axis=0)
+spf_cov = np.mean((spf[:,:,:,0] < gt) * (spf[:,:,:,1] > gt), axis=0)
+
+for i in range(d):
+    ax[0,i].plot(sample_sizes, spf_mean[:,i,0], color='blue', ls='-', label='SPF $f^*$')
+    ax[0,i].plot(sample_sizes, spf_mean[:,i,1], color='blue', ls='-')
+    ax[1,i].plot(sample_sizes, spf_cov[:,i], color='blue', alpha=0.6, ls='-')
+
+ax[0,2].plot([0], [20], color='grey', ls='-', label='High-quality $f$')
+
+# Surrogate SPF, high-quality surrogate
+for fp in os.listdir(DATA_DIR.format('spf_surrogate', '100000')):
+	spf_surrogate.append(np.load(fp))
+spf_surrogate = np.array(spf_surrogate)
+spf_surrogate_mean = np.mean(spf_surrogate, axis=0)
+spf_surrogate_cov = np.mean((spf_surrogate[:,:,:,0] < gt) * (spf_surrogate[:,:,:,1] > gt), axis=0)
+
+for i in range(d):
+    ax[0,i].plot(sample_sizes, spf_surrogate_mean[:,i,0], color='orange', ls='-', label='SPF $f$')
+    ax[0,i].plot(sample_sizes, spf_surrogate_mean[:,i,1], color='orange', ls='-')
+    ax[1,i].plot(sample_sizes, spf_surrogate_cov[:,i], color='orange', alpha=0.6, ls='-')
+
+# Floodgate, low-quality surrogate
+for fp in os.listdir(DATA_DIR.format('floodgate', '10000')):
+	floodgate.append(np.load(fp))
+floodgate = np.array(floodgate)
+floodgate_mean = np.mean(floodgate, axis=0)
+floodgate_cov = np.mean((floodgate[:,:,:,0] < gt) * (floodgate[:,:,:,1] > gt), axis=0)
+
+for i in range(d):
+    ax[0,i].plot(sample_sizes, floodgate_mean[:,i,0], color='green', ls='--')
+    ax[0,i].plot(sample_sizes, floodgate_mean[:,i,1], color='green', ls='--')
+    ax[1,i].plot(sample_sizes, floodgate_cov[:,i], color='green', alpha=0.6, ls='--')
+
+# Surrogate SPF, low-quality surrogate
+for fp in os.listdir(DATA_DIR.format('spf_surrogate', '10000')):
+	spf_surrogate.append(np.load(fp))
+spf_surrogate = np.array(spf_surrogate)
+spf_surrogate_mean = np.mean(spf_surrogate, axis=0)
+spf_surrogate_cov = np.mean((spf_surrogate[:,:,:,0] < gt) * (spf_surrogate[:,:,:,1] > gt), axis=0)
+
+for i in range(d):
+    ax[0,i].plot(sample_sizes, spf_surrogate_mean[:,i,0], color='orange', ls='--')
+    ax[0,i].plot(sample_sizes, spf_surrogate_mean[:,i,1], color='orange', ls='--')
+    ax[1,i].plot(sample_sizes, spf_surrogate_cov[:,i], color='orange', alpha=0.6, ls='--')
+
+
+# Plot formatting
+SMALL_SIZE = 10
+MEDIUM_SIZE = 18
+BIG_SIZE = 20
+BIGGER_SIZE = 24
+HUGE_SIZE = 28
+
+plt.rc('font', size=SMALL_SIZE)          # controls default text sizes
+plt.rc('axes', titlesize=BIGGER_SIZE)     # fontsize of the axes title
+plt.rc('axes', labelsize=BIGGER_SIZE)    # fontsize of the x and y labels
+plt.rc('xtick', labelsize=MEDIUM_SIZE)    # fontsize of the tick labels
+plt.rc('ytick', labelsize=MEDIUM_SIZE)    # fontsize of the tick labels
+plt.rc('legend', fontsize=BIG_SIZE)    # legend fontsize
+plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
+
+x_ticks = [100, 1000, 10000, 100000]
+x_tick_labs = ['100', '1000', '10000', '100000']
+for i in range(d):
+    ax[0,i].set(xticks=x_ticks, xscale='log', title=X_labels[i])
+    ax[1,i].set(xticks=x_ticks, xscale='log')
+    ax[1,i].set_ylim((0,1.05))
+    ax[0,i].axhline(y=gt[i], color='red', ls=':', label='Target')
+    ax[1,i].axhline(y=0.95, color='red', ls=':')
+ax[0,0].set(ylabel='Confidence Bounds for $S_j$')
+ax[1,0].set(ylabel='Coverage')
+    
+ax[0,0].set_ylim((-0.01,0.4))
+ax[0,1].set_ylim((-0.01,0.32))
+ax[0,2].set_ylim((0.1,0.95))
+ax[0,3].set_ylim((-0.01,0.32))
+ax[0,4].set_ylim((0.1,0.9))
+
+ax[0,2].legend(loc='lower center', bbox_to_anchor=(0.5, -1.85), ncol=3, fancybox=True)
+ax[1,2].set_xlabel('Computational Budget $N$', fontsize=HUGE_SIZE)
+ax[1,2].xaxis.labelpad = 15
+
+
+# Save plot
+plt.savefig(FIG_DIR + 'Hymod_bounds.png', bbox_inches="tight")
+
+
+
+
+
+

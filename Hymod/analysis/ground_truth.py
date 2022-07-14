@@ -18,7 +18,7 @@ d = xmax.shape[0]
 
 n = int(1e7)
 
-output_dir = '../data/analysis/'
+OUTPUT_DIR = '../data/analysis/'
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
@@ -29,5 +29,5 @@ t1 = time()
 results = SPF(X, fstar, xmin, xmax, alpha=1)
 print(f"Total model evalutations ({n * (d + 1)}): {(time() - t1): .2f} seconds")
 
-np.save(output_dir + 'ground_truth.npy', results)
+np.save(OUTPUT_DIR + 'ground_truth.npy', results)
 
