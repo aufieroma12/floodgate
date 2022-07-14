@@ -11,12 +11,16 @@ from config.config import Hymod_inputs
 
 FIG_DIR = '../figs/'
 DATA_DIR = '../Hymod/data/analysis/{}/{}/'
+if not os.path.exists(FIG_DIR):
+	os.mkdir(FIG_DIR)
 
 sample_sizes = [100, 250, 500, 1000, 5000, 10000, 50000]
 X_labels = Hymod_inputs['labels']
 d = len(X_labels)
 gt = np.load(DATA_DIR.format('.','.') + 'ground_truth.npy')
 
+
+### Figure 1 ###
 fig, ax = plt.subplots(2, 5, figsize=(25,10))
 
 floodgate = []
@@ -108,28 +112,98 @@ x_tick_labs = ['100', '1000', '10000', '100000']
 for i in range(d):
     ax[0,i].set(xticks=x_ticks, xscale='log', title=X_labels[i])
     ax[1,i].set(xticks=x_ticks, xscale='log')
-    ax[1,i].set_ylim((0,1.05))
     ax[0,i].axhline(y=gt[i], color='red', ls=':', label='Target')
     ax[1,i].axhline(y=0.95, color='red', ls=':')
-ax[0,0].set(ylabel='Confidence Bounds for $S_j$')
-ax[1,0].set(ylabel='Coverage')
-    
+    ax[1,i].set_ylim((0,1.05))
 ax[0,0].set_ylim((-0.01,0.4))
 ax[0,1].set_ylim((-0.01,0.32))
 ax[0,2].set_ylim((0.1,0.95))
 ax[0,3].set_ylim((-0.01,0.32))
 ax[0,4].set_ylim((0.1,0.9))
 
-ax[0,2].legend(loc='lower center', bbox_to_anchor=(0.5, -1.85), ncol=3, fancybox=True)
+ax[0,0].set(ylabel='Confidence Bounds for $S_j$')
+ax[1,0].set(ylabel='Coverage')
 ax[1,2].set_xlabel('Computational Budget $N$', fontsize=HUGE_SIZE)
+ax[0,2].legend(loc='lower center', bbox_to_anchor=(0.5, -1.85), ncol=3, fancybox=True)
 ax[1,2].xaxis.labelpad = 15
 
-
-# Save plot
+# Save plots
 plt.savefig(FIG_DIR + 'Hymod_bounds.png', bbox_inches="tight")
 
 
 
 
 
+### Figure 2 ###
+fig, ax = plt.subplots(2, 5, figsize=(25,10))
+
+floodgate = []
+panin = []
+
+# Floodgate, high-quality surrogate
+for fp in os.listdir(DATA_DIR.format('floodgate', 100000)):
+	floodgate.append(np.load(fp))
+floodgate = np.array(floodgate)
+floodgate_mean = np.mean(floodgate[:,:,:,1] - floodgate[:,:,:,0], axis=0)
+floodgate_cov = np.mean((floodgate[:,:,:,0] < gt) * (floodgate[:,:,:,1] > gt), axis=0)
+
+for i in range(d):
+    ax[0,i].plot(sample_sizes, floodgate_mean[:,i], color='green', ls='-', label='Floodgate')
+    ax[1,i].plot(sample_sizes, floodgate_cov[:,i], color='green', alpha=0.6, ls='-')
+
+ax[0,2].plot([0], [20], color='grey', ls='--', label='Low-quality $f$')
+
+# Panin bound, high-quality surrogate
+for fp in os.listdir(DATA_DIR.format('panin', 100000)):
+	panin.append(np.load(fp))
+panin = np.array(panin)
+panin_mean = np.mean(panin[:,:,:,1] - panin[:,:,:,0], axis=0)
+panin_cov = np.mean((panin[:,:,:,0] < gt) * (panin[:,:,:,1] > gt), axis=0)
+
+for i in range(d):
+    ax[0,i].plot(sample_sizes, panin_mean[:,i], color='purple', ls='-', label='Panin Bounds')
+    ax[1,i].plot(sample_sizes, panin_cov[:,i], color='purple', alpha=0.6, ls='-')
+
+ax[0,2].plot([0], [20], color='grey', ls='-', label='High-quality $f$')
+
+# Floodgate, low-quality surrogate
+for fp in os.listdir(DATA_DIR.format('floodgate', 10000)):
+	floodgate.append(np.load(fp))
+floodgate = np.array(floodgate)
+floodgate_mean = np.mean(floodgate[:,:,:,1] - floodgate[:,:,:,0], axis=0)
+floodgate_cov = np.mean((floodgate[:,:,:,0] < gt) * (floodgate[:,:,:,1] > gt), axis=0)
+
+for i in range(d):
+    ax[0,i].plot(sample_sizes, floodgate_mean[:,i], color='green', ls='--')
+    ax[1,i].plot(sample_sizes, floodgate_cov[:,i], color='green', alpha=0.6, ls='--')
+
+# Panin bound, low-quality surrogate
+for fp in os.listdir(DATA_DIR.format('panin', 10000)):
+	panin.append(np.load(fp))
+panin = np.array(panin)
+panin_mean = np.mean(panin[:,:,:,1] - panin[:,:,:,0], axis=0)
+panin_cov = np.mean((panin[:,:,:,0] < gt) * (panin[:,:,:,1] > gt), axis=0)
+
+for i in range(d):
+    ax[0,i].plot(sample_sizes, panin_mean[:,i], color='purple', ls='--')
+    ax[1,i].plot(sample_sizes, panin_cov[:,i], color='purple', alpha=0.6, ls='--')
+
+
+# Plot formatting
+for i in range(d):
+    ax[0,i].set(xticks=x_ticks, xscale='log', title=X_labels[i])
+    ax[1,i].set(xticks=x_ticks, xscale='log')   
+    ax[1,i].axhline(y=0.95, color='red', ls=':')
+    ax[0,i].set_ylim((0,1.01))
+    ax[1,i].set_ylim((0,1.05))
+
+ax[0,2].plot([0], [20], color='red', ls=':', label="Target")
+ax[0,0].set(ylabel='Width of \nConfidence Intervals')
+ax[1,0].set(ylabel='Coverage')
+ax[1,2].set_xlabel('Computational Budget $N$', fontsize=HUGE_SIZE)
+ax[0,2].legend(loc='lower center', bbox_to_anchor=(0.5, -1.85), ncol=3, fancybox=True)
+ax[1,2].xaxis.labelpad = 15
+
+# Save plots
+plt.savefig(FIG_DIR + 'Hymod_panin_widths.png', bbox_inches="tight")
 

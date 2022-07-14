@@ -95,8 +95,8 @@ def SPF(inputs, fstar, xmin, xmax, alpha=0.05, batch_size=1, Y=None, ind=None):
         
         Sig = np.cov(np.vstack((Mj,V)))
         s = np.sqrt((Sig[0,0] - 2 * (Mj_bar / V_bar) * Sig[0,1] + ((Mj_bar / V_bar) ** 2) * Sig[1,1]) / (V_bar ** 2))
-        U_vals.append(Mj_bar / V_bar + z * (s / np.sqrt(n_batches)))
-        L_vals.append(Mj_bar / V_bar - z * (s / np.sqrt(n_batches)))
+        U_vals.append(min(1, Mj_bar / V_bar + z * (s / np.sqrt(n_batches))))
+        L_vals.append(max(0, Mj_bar / V_bar - z * (s / np.sqrt(n_batches))))
 
     return list(zip(L_vals, U_vals))
 
@@ -184,7 +184,9 @@ def panin_bound(Mjf, Vf, M, V, z):
  
     s_upper = grad_upper.T @ Sig @ grad_upper
     s_lower = grad_lower.T @ Sig @ grad_lower
-    return (Mjf / Vf - bound - z * (s_lower/np.sqrt(n)), Mjf / Vf + bound + z * (s_upper/np.sqrt(n)))
+    Lower = max(0, Mjf / Vf - bound - z * (s_lower/np.sqrt(n)))
+    Upper = min(1, Mjf / Vf + bound + z * (s_upper/np.sqrt(n)))
+    return (Lower, Upper)
 
 
 
@@ -247,7 +249,7 @@ def combined_surrogate_methods(inputs, f, xmin, xmax, K=50, alpha=0.05, batch_si
         L_vals_floodgate.append(max(0, (Mj_bar - M_bar) / V_bar - z * (s_lower / np.sqrt(n_batches))))
 
 
-        # Bounds surrogate
+        # Bounds SPF
         Vf = (n / (n - 1)) * (Y_preds - np.mean(Y_preds)) ** 2
         Vf = np.mean(Vf.reshape(-1, batch_size), axis=1)
         Vf_bar = np.mean(Vf)
@@ -258,8 +260,8 @@ def combined_surrogate_methods(inputs, f, xmin, xmax, K=50, alpha=0.05, batch_si
         
         Sig = np.cov(np.vstack((Mjf,Vf)))
         s = np.sqrt(Sig[0,0] - 2 * (Mjf_bar / Vf_bar) * Sig[0,1] + ((Mjf_bar / Vf_bar) ** 2) * Sig[1,1]) / Vf_bar
-        U_vals_spf.append(Mjf_bar / Vf_bar + z * (s / np.sqrt(n_batches)))
-        L_vals_spf.append(Mjf_bar / Vf_bar - z * (s / np.sqrt(n_batches)))
+        L_vals_spf.append(max(0, Mjf_bar / Vf_bar - z * (s / np.sqrt(n_batches))))
+        U_vals_spf.append(min(1, Mjf_bar / Vf_bar + z * (s / np.sqrt(n_batches))))
   
 
         # Bounds Panin
