@@ -10,8 +10,8 @@ warnings.filterwarnings('ignore')
 import sys
 sys.path.append('../../')
 
-from src.surrogate import KRRcv
-from config.config import KRR_hyperparams
+from src.surrogate import Hymod, KRRcv
+from config.config import Hymod_inputs, KRR_hyperparams
 
 
 parser = argparse.ArgumentParser()
@@ -21,15 +21,17 @@ args = parser.parse_args()
 n = args.n_samples
 index = args.index
 
-data_path = '../data/outputs/dataset_1000.npy'
-model_dir = '../models/'
+MODEL_DIR = '../models/'
 if not os.path.exists(model_dir):
     os.mkdir(model_dir)
 
-data = np.load(data_path)
-data = data[:n]
-X = data[:,:-1]
-y = data[:,-1]
+fstar = Hymod()
+
+xmin = Hymod_inputs["min"]
+xmax = Hymod_inputs["max"]
+d = xmin.shape[0]
+X = np.random.rand(n, d) @ np.diag(xmax - xmin) + np.ones((n, d)) @ np.diag(xmin)
+y = fstar.predict(X)
 
 alphas, gammas = KRR_hyperparams[n]
 

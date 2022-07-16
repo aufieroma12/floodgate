@@ -18,7 +18,7 @@ Hymod_inputs = {
 	"FORCING_PATH": BASE_DIR + 'Hymod/data/inputs/LeafCatch.txt'
 }
 
-conc_ranges = np.array(pd.read_csv(BASE_DIR + 'data/ranges/conc_range.csv'))
+conc_ranges = np.array(pd.read_csv(BASE_DIR + 'CBMZ/data/ranges/conc_range.csv'))
 CBMZ_inputs = {
 	"labels": 
 	[

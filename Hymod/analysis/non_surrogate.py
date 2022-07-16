@@ -36,7 +36,7 @@ OUTPUT_DIR = '../data/analysis/spf/'
 if not os.path.exists(OUTPUT_DIR):
     os.makedirs(OUTPUT_DIR)
 
-fstar = Hymod(obsPath="../data/inputs/LeafCatch.txt")
+fstar = Hymod()
 
 for i in range(start, end):
     print(f'Evaluating dataset {i}:')
