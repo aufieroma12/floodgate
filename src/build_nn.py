@@ -151,25 +151,25 @@ n_steps_eval = int(num_rec_tr/12.0/batch_size_tr)
 
 
 def build_model(num_blocks, num_layers, latent_size, compressed_species, dropout, runnum, n_steps=n_steps):
-	model = resnet(n_conc=compressed_species, n_met=len(met_names),res_blocks=num_blocks,
-	               model_fn=lambda name: make_mlp_model(latent_size=latent_size,
-	               num_layers=num_layers, dropout=dropout, name=name))
+    model = resnet(n_conc=compressed_species, n_met=len(met_names),res_blocks=num_blocks,
+                   model_fn=lambda name: make_mlp_model(latent_size=latent_size,
+                   num_layers=num_layers, dropout=dropout, name=name))
 
-	encoder = make_codec(compressed_species, name="encoder")
-	decoder = make_codec(len(substances), name="decoder")
+    encoder = make_codec(compressed_species, name="encoder")
+    decoder = make_codec(len(substances), name="decoder")
 
-	diurnal_model = roll_out_model(model, encoder, decoder, len(substances), len(met_names), n_steps-1, name="diurnal_roll_out")
+    diurnal_model = roll_out_model(model, encoder, decoder, len(substances), len(met_names), n_steps-1, name="diurnal_roll_out")
 
-	print("print LR", batch_size_tr / 8.0 * 1.0e-5 )
-	print("print eval steps", n_steps_eval)
-	print("print steps", int(num_rec_tr/batch_size_tr*(10.0/12.0)))
+    print("print LR", batch_size_tr / 8.0 * 1.0e-5 )
+    print("print eval steps", n_steps_eval)
+    print("print steps", int(num_rec_tr/batch_size_tr*(10.0/12.0)))
 
-	print("NUMBER OF COMPRESSED SPECIES: ", compressed_species)
+    print("NUMBER OF COMPRESSED SPECIES: ", compressed_species)
 
-	learning_rate = batch_size_tr / 8.0 * 1.0e-5
-	diurnal_model.compile(
-	        tf.keras.optimizers.Adam(learning_rate=learning_rate),
-	        loss=mse_focus_o3,
-	        metrics=['mean_squared_error', mse_focus_o3_pm, mse_focus_o3, mse_focus_pm])
+    learning_rate = batch_size_tr / 8.0 * 1.0e-5
+    diurnal_model.compile(
+            tf.keras.optimizers.Adam(learning_rate=learning_rate),
+            loss=mse_focus_o3,
+            metrics=['mean_squared_error', mse_focus_o3_pm, mse_focus_o3, mse_focus_pm])
 
-	return diurnal_model, model, encoder, decoder
+    return diurnal_model, model, encoder, decoder

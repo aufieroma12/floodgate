@@ -12,7 +12,7 @@ from config.config import Hymod_inputs
 FIG_DIR = '../figs/'
 DATA_DIR = '../Hymod/data/analysis/{}/{}/'
 if not os.path.exists(FIG_DIR):
-	os.mkdir(FIG_DIR)
+    os.mkdir(FIG_DIR)
 
 sample_sizes = [100, 250, 500, 1000, 5000, 10000, 50000]
 X_labels = Hymod_inputs['labels']
@@ -29,7 +29,7 @@ spf_surrogate = []
 
 # Floodgate, high-quality surrogate
 for fp in os.listdir(DATA_DIR.format('floodgate', '100000')):
-	floodgate.append(np.load(fp))
+    floodgate.append(np.load(fp))
 floodgate = np.array(floodgate)
 floodgate_mean = np.mean(floodgate, axis=0)
 floodgate_cov = np.mean((floodgate[:,:,:,0] < gt) * (floodgate[:,:,:,1] > gt), axis=0)
@@ -43,7 +43,7 @@ ax[0,2].plot([0], [20], color='grey', ls='--', label='Low-quality $f$')
 
 # Non-surrogate SPF
 for fp in os.listdir(DATA_DIR.format('spf', '.')):
-	spf.append(np.load(fp))
+    spf.append(np.load(fp))
 spf = np.array(spf)
 spf_mean = np.mean(spf, axis=0)
 spf_cov = np.mean((spf[:,:,:,0] < gt) * (spf[:,:,:,1] > gt), axis=0)
@@ -57,7 +57,7 @@ ax[0,2].plot([0], [20], color='grey', ls='-', label='High-quality $f$')
 
 # Surrogate SPF, high-quality surrogate
 for fp in os.listdir(DATA_DIR.format('spf_surrogate', '100000')):
-	spf_surrogate.append(np.load(fp))
+    spf_surrogate.append(np.load(fp))
 spf_surrogate = np.array(spf_surrogate)
 spf_surrogate_mean = np.mean(spf_surrogate, axis=0)
 spf_surrogate_cov = np.mean((spf_surrogate[:,:,:,0] < gt) * (spf_surrogate[:,:,:,1] > gt), axis=0)
@@ -69,7 +69,7 @@ for i in range(d):
 
 # Floodgate, low-quality surrogate
 for fp in os.listdir(DATA_DIR.format('floodgate', '10000')):
-	floodgate.append(np.load(fp))
+    floodgate.append(np.load(fp))
 floodgate = np.array(floodgate)
 floodgate_mean = np.mean(floodgate, axis=0)
 floodgate_cov = np.mean((floodgate[:,:,:,0] < gt) * (floodgate[:,:,:,1] > gt), axis=0)
@@ -81,7 +81,7 @@ for i in range(d):
 
 # Surrogate SPF, low-quality surrogate
 for fp in os.listdir(DATA_DIR.format('spf_surrogate', '10000')):
-	spf_surrogate.append(np.load(fp))
+    spf_surrogate.append(np.load(fp))
 spf_surrogate = np.array(spf_surrogate)
 spf_surrogate_mean = np.mean(spf_surrogate, axis=0)
 spf_surrogate_cov = np.mean((spf_surrogate[:,:,:,0] < gt) * (spf_surrogate[:,:,:,1] > gt), axis=0)
@@ -142,7 +142,7 @@ panin = []
 
 # Floodgate, high-quality surrogate
 for fp in os.listdir(DATA_DIR.format('floodgate', 100000)):
-	floodgate.append(np.load(fp))
+    floodgate.append(np.load(fp))
 floodgate = np.array(floodgate)
 floodgate_mean = np.mean(floodgate[:,:,:,1] - floodgate[:,:,:,0], axis=0)
 floodgate_cov = np.mean((floodgate[:,:,:,0] < gt) * (floodgate[:,:,:,1] > gt), axis=0)
@@ -155,7 +155,7 @@ ax[0,2].plot([0], [20], color='grey', ls='--', label='Low-quality $f$')
 
 # Panin bound, high-quality surrogate
 for fp in os.listdir(DATA_DIR.format('panin', 100000)):
-	panin.append(np.load(fp))
+    panin.append(np.load(fp))
 panin = np.array(panin)
 panin_mean = np.mean(panin[:,:,:,1] - panin[:,:,:,0], axis=0)
 panin_cov = np.mean((panin[:,:,:,0] < gt) * (panin[:,:,:,1] > gt), axis=0)
@@ -168,7 +168,7 @@ ax[0,2].plot([0], [20], color='grey', ls='-', label='High-quality $f$')
 
 # Floodgate, low-quality surrogate
 for fp in os.listdir(DATA_DIR.format('floodgate', 10000)):
-	floodgate.append(np.load(fp))
+    floodgate.append(np.load(fp))
 floodgate = np.array(floodgate)
 floodgate_mean = np.mean(floodgate[:,:,:,1] - floodgate[:,:,:,0], axis=0)
 floodgate_cov = np.mean((floodgate[:,:,:,0] < gt) * (floodgate[:,:,:,1] > gt), axis=0)
@@ -179,7 +179,7 @@ for i in range(d):
 
 # Panin bound, low-quality surrogate
 for fp in os.listdir(DATA_DIR.format('panin', 10000)):
-	panin.append(np.load(fp))
+    panin.append(np.load(fp))
 panin = np.array(panin)
 panin_mean = np.mean(panin[:,:,:,1] - panin[:,:,:,0], axis=0)
 panin_cov = np.mean((panin[:,:,:,0] < gt) * (panin[:,:,:,1] > gt), axis=0)

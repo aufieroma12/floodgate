@@ -12,7 +12,7 @@ from config.config import CBMZ_inputs
 FIG_DIR = '../figs/'
 DATA_PATH = '../CBMZ/data/analysis/{}.npy'
 if not os.path.exists(FIG_DIR):
-	os.mkdir(FIG_DIR)
+    os.mkdir(FIG_DIR)
 
 n_batches = [4, 7, 40, 79, 391, 625]
 sample_sizes = [x * 128 for x in n_batches]

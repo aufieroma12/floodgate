@@ -36,24 +36,24 @@ y = fstar.predict(X)
 alphas, gammas = KRR_hyperparams[n]
 
 if index >= 0:
-	model_dir = f'{model_dir}n_{n}/'
-	if not os.path.exists(model_dir):
-    	os.mkdir(model_dir)
+    model_dir = f'{model_dir}n_{n}/'
+    if not os.path.exists(model_dir):
+        os.mkdir(model_dir)
     alpha = alphas[index // len(gammas)]
     gamma = gammas[index % len(gammas)]
 
     f = KRRcv([alpha], [gamma])
     t1 = time()
-	f.fit(X, y)
-	joblib.dump(f, f"{model_dir}a_{alpha}_g_{gamma}.pkl")
+    f.fit(X, y)
+    joblib.dump(f, f"{model_dir}a_{alpha}_g_{gamma}.pkl")
 
 else:
-	f = KRRcv(alphas, gammas)
-	t1 = time()
-	f.fit(X, y)
-	joblib.dump(f, f"{model_dir}n_{n}.pkl") 
-	alpha = f.model.best_params_['alpha']
-	gamma = f.model.best_params_['gamma']
+    f = KRRcv(alphas, gammas)
+    t1 = time()
+    f.fit(X, y)
+    joblib.dump(f, f"{model_dir}n_{n}.pkl") 
+    alpha = f.model.best_params_['alpha']
+    gamma = f.model.best_params_['gamma']
 
 
 print(f'n={n}: {time()-t1: .3f} seconds')
