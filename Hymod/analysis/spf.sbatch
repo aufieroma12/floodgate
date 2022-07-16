@@ -10,5 +10,5 @@
 #SBATCH -e ../log/analysis/SPF/%A_%a.err # Standard error
 # Make new directory and run
 mkdir -p ../log/analysis/SPF/
-source $BASE_DIR/load_modules.sh
+source $BASE_DIR/config/load_modules.sh
 python3 non_surrogate.py --index=$SLURM_ARRAY_TASK_ID --num_datasets=$NUM_DATASETS

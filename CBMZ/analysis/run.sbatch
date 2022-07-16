@@ -11,5 +11,5 @@
 #SBATCH -e ../log/%A.err # Standard error
 # Make new directory and run
 mkdir -p ../log/
-source $BASE_DIR/load_modules.sh
+source $BASE_DIR/config/load_modules.sh
 python3 analysis.py

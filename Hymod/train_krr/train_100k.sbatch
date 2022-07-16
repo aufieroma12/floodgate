@@ -10,6 +10,6 @@
 #SBATCH -e ../log/krr_train/n_100000/%A_%a.err # Standard error
 # make new directory and run
 mkdir -p ../log/krr_train/n_100000/
-source $BASE_DIR/load_modules.sh
+source $BASE_DIR/config/load_modules.sh
 python3 train.py --n_samples=100000 --index=$SLURM_ARRAY_TASK_ID
 
