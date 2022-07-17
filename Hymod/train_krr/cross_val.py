@@ -11,8 +11,8 @@ import sys
 sys.path.append('../../src/')
 sys.path.append('../../config/')
 
-from src.surrogate import KRRcv
-from config.config import KRR_hyperparams
+from surrogate import KRRcv
+from config import KRR_hyperparams
 
 
 n = 100000

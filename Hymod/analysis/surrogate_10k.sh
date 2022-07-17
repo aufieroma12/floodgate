@@ -1,3 +1,3 @@
 export NUM_DATASETS=2
 mkdir -p ../log/analysis/n_10000/
-sbatch --array=5-49 surrogate_10k.sbatch
+sbatch --array=0-499 surrogate_10k.sbatch
