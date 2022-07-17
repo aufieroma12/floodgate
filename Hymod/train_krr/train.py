@@ -2,16 +2,18 @@ import numpy as np
 import joblib
 from time import time
 import argparse
+import os
 
 import warnings
 from sklearn.exceptions import ConvergenceWarning
 warnings.filterwarnings('ignore')
 
 import sys
-sys.path.append('../../')
+sys.path.append('../../src/')
+sys.path.append('../../config/')
 
-from src.surrogate import Hymod, KRRcv
-from config.config import Hymod_inputs, KRR_hyperparams
+from surrogate import Hymod, KRRcv
+from config import Hymod_inputs, KRR_hyperparams
 
 
 parser = argparse.ArgumentParser()
@@ -22,8 +24,8 @@ n = args.n_samples
 index = args.index
 
 MODEL_DIR = '../models/'
-if not os.path.exists(model_dir):
-    os.mkdir(model_dir)
+if not os.path.exists(MODEL_DIR):
+    os.mkdir(MODEL_DIR)
 
 fstar = Hymod()
 
@@ -36,22 +38,22 @@ y = fstar.predict(X)
 alphas, gammas = KRR_hyperparams[n]
 
 if index >= 0:
-    model_dir = f'{model_dir}n_{n}/'
-    if not os.path.exists(model_dir):
-        os.mkdir(model_dir)
+    MODEL_DIR = f'{MODEL_DIR}n_{n}/'
+    if not os.path.exists(MODEL_DIR):
+        os.mkdir(MODEL_DIR)
     alpha = alphas[index // len(gammas)]
     gamma = gammas[index % len(gammas)]
 
     f = KRRcv([alpha], [gamma])
     t1 = time()
     f.fit(X, y)
-    joblib.dump(f, f"{model_dir}a_{alpha}_g_{gamma}.pkl")
+    joblib.dump(f, f"{MODEL_DIR}a_{alpha}_g_{gamma}.pkl")
 
 else:
     f = KRRcv(alphas, gammas)
     t1 = time()
     f.fit(X, y)
-    joblib.dump(f, f"{model_dir}n_{n}.pkl") 
+    joblib.dump(f, f"{MODEL_DIR}n_{n}.pkl") 
     alpha = f.model.best_params_['alpha']
     gamma = f.model.best_params_['gamma']
 

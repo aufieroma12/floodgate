@@ -2,8 +2,8 @@ import numpy as np
 
 def get_knockoffs(inputs, X_ind, xmin, xmax, K):
     if isinstance(inputs, tuple):
-        X, met = inputs
-        met_new = np.zeros(((n*K), met.shape[1], met.shape[2]))
+        X, met = inputs 
+        met_new = np.zeros((met.shape[0]*K, met.shape[1], met.shape[2]))
     else:
         X = inputs
 

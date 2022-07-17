@@ -9,11 +9,12 @@ from sklearn.exceptions import ConvergenceWarning
 warnings.filterwarnings('ignore')
 
 import sys
-sys.path.append('../../')
+sys.path.append('../../src')
+sys.path.append('../../config')
 
-from src.sensitivity import combined_surrogate_methods
-from src.surrogate import KRRcv, Hymod
-from config.config import Hymod_inputs
+from sensitivity import combined_surrogate_methods
+from surrogate import KRRcv, Hymod
+from config import Hymod_inputs
 
 
 parser = argparse.ArgumentParser()
@@ -39,12 +40,12 @@ sample_sizes = [100, 250, 500, 1000, 5000, 10000, 50000]
 n_max = sample_sizes[-1] # Total number of samples
 
 DATA_PATH = '../data/outputs/{}.npy'
-MODEL_PATH = f'../models/n_{train_size}'
+MODEL_PATH = f'../models/n_{train_size}.pkl'
 OUTPUT_DIR = '../data/analysis/{}/{}/'
 
-os.makedirs(OUTPUT_DIR.format('floodgate', train_size))
-os.makedirs(OUTPUT_DIR.format('spf_surrogate', train_size))
-os.makedirs(OUTPUT_DIR.format('panin', train_size))
+os.makedirs(OUTPUT_DIR.format('floodgate', train_size), exist_ok=True)
+os.makedirs(OUTPUT_DIR.format('spf_surrogate', train_size), exist_ok=True)
+os.makedirs(OUTPUT_DIR.format('panin', train_size), exist_ok=True)
 
 fstar = Hymod()
 f = joblib.load(MODEL_PATH)

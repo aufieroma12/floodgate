@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-BASE_DIR = '~/Documents_offline/Research/floodgate/'
+BASE_DIR = '/n/home13/aufieroma/floodgate/' #'~/Documents_offline/Research/floodgate/'
 
 KRR_hyperparams = {
     100: (np.logspace(-8, 3, 30), np.logspace(-5, 4, 20)),

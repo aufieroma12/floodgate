@@ -208,10 +208,10 @@ def combined_surrogate_methods(inputs, f, xmin, xmax, K=50, alpha=0.05, batch_si
     z = norm.ppf(1 - alpha / 2)
 
     L_vals_floodgate = []
-    L_vals_SPF = []
+    L_vals_spf = []
     L_vals_panin = []
     U_vals_floodgate = []
-    U_vals_SPF = []
+    U_vals_spf = []
     U_vals_panin = []
 
     # Get surrogate predictions for original data

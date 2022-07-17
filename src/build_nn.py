@@ -8,7 +8,7 @@ import tensorflow.compat.v1 as tf
 from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras import backend as K
 
-from config.config import CBMZ_inputs
+from config import CBMZ_inputs
 
 substances = CBMZ_inputs["labels"]
 met_names = CBMZ_inputs["met_labels"]
@@ -170,6 +170,6 @@ def build_model(num_blocks, num_layers, latent_size, compressed_species, dropout
     diurnal_model.compile(
             tf.keras.optimizers.Adam(learning_rate=learning_rate),
             loss=mse_focus_o3,
-            metrics=['mean_squared_error', mse_focus_o3_pm, mse_focus_o3, mse_focus_pm])
+            metrics=['mean_squared_error', mse_focus_o3])
 
     return diurnal_model, model, encoder, decoder

@@ -8,7 +8,8 @@ from sklearn.exceptions import ConvergenceWarning
 warnings.filterwarnings('ignore')
 
 import sys
-sys.path.append('../../')
+sys.path.append('../../src/')
+sys.path.append('../../config/')
 
 from src.surrogate import KRRcv
 from config.config import KRR_hyperparams

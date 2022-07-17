@@ -34,7 +34,7 @@ n_max = sample_sizes[-1] # Total number of samples
 DATA_PATH = '../data/outputs/{}.npy'
 OUTPUT_DIR = '../data/analysis/spf/'
 if not os.path.exists(OUTPUT_DIR):
-    os.makedirs(OUTPUT_DIR)
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 fstar = Hymod()
 

@@ -1,2 +1,3 @@
-export NUM_DATASETS=2
-sbatch --array=0-500 spf.sbatch
+export NUM_DATASETS=200
+mkdir -p ../log/analysis/SPF/
+sbatch --array=0-4 spf.sbatch

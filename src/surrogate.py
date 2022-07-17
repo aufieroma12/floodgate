@@ -184,7 +184,7 @@ class KelpNN(Surrogate):
     def fit(self, X, y):
         pass
 
-    @batched(2.5e4)
+    @batched(int(2.5e4))
     def predict(self, inputs):
         X, met = inputs
         X = tf.expand_dims(X, 1)

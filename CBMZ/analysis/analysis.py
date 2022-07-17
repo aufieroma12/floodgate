@@ -2,16 +2,19 @@ import numpy as np
 import pandas as pd
 import pickle
 from time import time 
+import os
+
 import tensorflow.compat.v1 as tf
 from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras import backend as K
 
 import sys
-sys.path.append('../../')
+sys.path.append('../../src/')
+sys.path.append('../../config/')
 
-from src.sensitivity import combined_surrogate_methods
-from src.surrogate import KelpNN
-from config.config import CBMZ_inputs, BASE_DIR
+from sensitivity import combined_surrogate_methods
+from surrogate import KelpNN
+from config import CBMZ_inputs, BASE_DIR
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -29,8 +32,7 @@ d = len(substances) # Number of input parameters
 
 DATA_DIR = '../data/outputs/'
 OUTPUT_DIR = '../data/analysis/'
-if not os.path.exists(OUTPUT_DIR):
-    os.makedirs(OUTPUT_DIR)
+os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 n_steps = 3
 X = np.load(DATA_DIR + 'conc_inputs.npy')
