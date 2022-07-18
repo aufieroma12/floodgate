@@ -136,7 +136,7 @@ class KRRcv(Surrogate):
     def fit(self, X, y):
         self.model.fit(X, y)
 
-    @batched(int(2.5e5))
+    @batched(int(5e4))
     def predict(self, X):
         return self.model.predict(X)
     
