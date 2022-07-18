@@ -1,11 +1,11 @@
 #!/bin/bash
 # surrogate_100k.sbatch
 #
-#SBATCH -J sgate10k # Job name for the array
+#SBATCH -J sgate100k # Job name for the array
 #SBATCH -p janson # Partition to run job on
 #SBATCH -c 1 # Number of cores
 #SBATCH -t 0-10:00 # Running time of 10 hours
-#SBATCH --mem 30000 # Memory request of 30 GB
+#SBATCH --mem 100000 # Memory request of 100 GB
 #SBATCH -o ../log/analysis/n_100000/%A_%a.out # Standard output
 #SBATCH -e ../log/analysis/n_100000/%A_%a.err # Standard error
 # Make new directory and run!
