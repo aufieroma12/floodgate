@@ -20,7 +20,7 @@ n = int(1e8) # Number of samples to use
 np.random.seed(n)
 
 OUTPUT_DIR = '../data/analysis/'
-os.makedirs(output_dir, exist_ok=True)
+os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 fstar = Hymod()
 X = np.random.rand(n, d) @ np.diag(xmax - xmin) + np.ones((n, d)) @ np.diag(xmin)

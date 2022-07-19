@@ -10,4 +10,4 @@
 #SBATCH -e ../log/analysis/ground_truth/%A.err # Standard error
 # Load modules and run
 source $BASE_DIR/config/load_modules.sh
-python3 grount_truth.py
+python3 ground_truth.py
