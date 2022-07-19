@@ -14,11 +14,13 @@ sys.path.append('../../config/')
 
 from sensitivity import combined_surrogate_methods
 from surrogate import KelpNN
-from config import CBMZ_inputs, BASE_DIR
+from config import CBMZ_inputs, Random_seeds, BASE_DIR
 
 import warnings
 warnings.filterwarnings('ignore')
 
+
+np.random.seed(Random_seeds["CBMZ"])
 
 substances = CBMZ_inputs["labels"]
 met_names = CBMZ_inputs["met_labels"]

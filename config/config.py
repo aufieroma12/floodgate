@@ -1,7 +1,16 @@
 import numpy as np
 import pandas as pd
 
-BASE_DIR = '/n/home13/aufieroma/floodgate/' #'~/Documents_offline/Research/floodgate/'
+Random_seeds = {
+    "CBMZ": 1,
+    "Hymod_train": 1000,
+    "Hymod_validation": 2000,
+    "Hymod_inputs": 3000,
+    "Hymod_analysis": 4000
+}
+
+BASE_DIR = '/n/home13/aufieroma/floodgate/' 
+# BASE_DIR = '/Users/Massimo/Documents_offline/Research/floodgate/'
 
 KRR_hyperparams = {
     100: (np.logspace(-8, 3, 30), np.logspace(-5, 4, 20)),

@@ -13,8 +13,7 @@ sys.path.append('../../src/')
 sys.path.append('../../config/')
 
 from surrogate import Hymod, KRRcv
-from config import Hymod_inputs, KRR_hyperparams
-
+from config import Hymod_inputs, KRR_hyperparams, Random_seeds
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--n_samples", type=int, required=True, help="Number of training samples.")
@@ -23,9 +22,10 @@ args = parser.parse_args()
 n = args.n_samples
 index = args.index
 
+np.random.seed(Random_seeds["Hymod_train"])
+
 MODEL_DIR = '../models/'
-if not os.path.exists(MODEL_DIR):
-    os.mkdir(MODEL_DIR)
+os.makedirs(MODEL_DIR, exist_ok=True)
 
 fstar = Hymod()
 
@@ -39,8 +39,8 @@ alphas, gammas = KRR_hyperparams[n]
 
 if index >= 0:
     MODEL_DIR = f'{MODEL_DIR}n_{n}/'
-    if not os.path.exists(MODEL_DIR):
-        os.mkdir(MODEL_DIR)
+    os.makedirs(MODEL_DIR, exist_ok=True)
+
     alpha = alphas[index // len(gammas)]
     gamma = gammas[index % len(gammas)]
 

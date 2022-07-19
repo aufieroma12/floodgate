@@ -14,7 +14,7 @@ sys.path.append('../../config')
 
 from sensitivity import combined_surrogate_methods
 from surrogate import KRRcv, Hymod
-from config import Hymod_inputs
+from config import Hymod_inputs, Random_seeds
 
 
 parser = argparse.ArgumentParser()
@@ -58,6 +58,7 @@ for i in range(start, end):
         y = data[:,-1]
         print("  Data read from file.\n")
     else:
+        np.random.seed(Random_seeds["Hymod_inputs"] + i)
         X = np.random.rand(n_max, d) @ np.diag(xmax - xmin) + np.ones((n_max, d)) @ np.diag(xmin)
         t1 = time()
         y = fstar.predict(X) 
@@ -70,6 +71,7 @@ for i in range(start, end):
     floodgate_results = []
     spf_results = []
     panin_results = []
+    np.random.seed(Random_seeds["Hymod_analysis"] + i)
 
     for N in sample_sizes:
         X_test = X[:N]

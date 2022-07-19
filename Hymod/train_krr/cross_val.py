@@ -12,8 +12,10 @@ sys.path.append('../../src/')
 sys.path.append('../../config/')
 
 from surrogate import Hymod, KRRcv
-from config import Hymod_inputs, KRR_hyperparams
+from config import Hymod_inputs, KRR_hyperparams, Random_seeds
 
+
+np.random.seed(Random_seeds["Hymod_validation"])
 
 n = 100000
 MODEL_DIR = f'../models/n_{n}/'

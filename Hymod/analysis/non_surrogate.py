@@ -9,7 +9,7 @@ sys.path.append('../../config')
 
 from sensitivity import SPF
 from surrogate import Hymod
-from config import Hymod_inputs
+from config import Hymod_inputs, Random_seeds
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--num_datasets", type=int, required=True, help="Number of datasets to evaluate.")
@@ -46,6 +46,7 @@ for i in range(start, end):
         y = data[:,-1]
         print("  Data read from file.\n")
     else:
+        np.random.seed(Random_seeds["Hymod_inputs"] + i)
         X = np.random.rand(n_max, d) @ np.diag(xmax - xmin) + np.ones((n_max, d)) @ np.diag(xmin)
         t1 = time()
         y = fstar.predict(X) 
@@ -56,6 +57,7 @@ for i in range(start, end):
 
     results = []
     print("  Analysis:")
+    np.random.seed(Random_seeds["Hymod_analysis"] + i)
 
     for N in sample_sizes:
         n = N // (d + 1)
