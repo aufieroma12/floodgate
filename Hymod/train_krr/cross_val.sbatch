@@ -8,7 +8,7 @@
 #SBATCH --mem 175000 # Memory request of 175 GB
 #SBATCH -o ../log/krr_train/n_100000/cross_val_%A.out # Standard output
 #SBATCH -e ../log/krr_train/n_100000/cross_val_%A.err # Standard error
-# make new directory and run
+# Load modules and run
 source $BASE_DIR/config/load_modules.sh
 python3 cross_val.py
 

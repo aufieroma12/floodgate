@@ -9,6 +9,6 @@
 #SBATCH --mem 40000 # Memory request of 40 GB
 #SBATCH -o ../log/%A.out # Standard output
 #SBATCH -e ../log/%A.err # Standard error
-# Make new directory and run
+# Load modules and run
 source $BASE_DIR/config/load_modules.sh
 python3 analysis.py

@@ -8,7 +8,7 @@
 #SBATCH --mem 175000 # Memory request of 175 GB
 #SBATCH -o ../log/krr_train/n_100000/%A_%a.out # Standard output
 #SBATCH -e ../log/krr_train/n_100000/%A_%a.err # Standard error
-# make new directory and run
+# Load modules and run
 source $BASE_DIR/config/load_modules.sh
 python3 train.py --n_samples=100000 --index=$SLURM_ARRAY_TASK_ID
 

@@ -8,6 +8,6 @@
 #SBATCH --mem 25000 # Memory request of 25 GB
 #SBATCH -o ../log/analysis/n_10000/%A_%a.out # Standard output
 #SBATCH -e ../log/analysis/n_10000/%A_%a.err # Standard error
-# Make new directory and run
+# Load modules and run
 source $BASE_DIR/config/load_modules.sh
 python3 surrogate_methods.py --train_size=10000 --index=$SLURM_ARRAY_TASK_ID --num_datasets=$NUM_DATASETS 
