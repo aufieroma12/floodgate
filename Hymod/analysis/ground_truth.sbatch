@@ -4,7 +4,7 @@
 #SBATCH -J gt_hymod # Job name for the array
 #SBATCH -p janson # Partition to run job on
 #SBATCH -c 1 # Number of cores
-#SBATCH -t 0-5:00 # Running time of 5 hours
+#SBATCH -t 0-10:00 # Running time of 10 hours
 #SBATCH --mem 50000 # Memory request of 50 GB
 #SBATCH -o ../log/analysis/ground_truth/%A.out # Standard output
 #SBATCH -e ../log/analysis/ground_truth/%A.err # Standard error
