@@ -49,16 +49,19 @@ for (i, idx) in enumerate(plot_subset):
     ax[i].plot(sample_sizes, panin[:,idx,1], color='purple', ls='-', alpha=0.9)
 
 
-x_ticks = [100, 1000, 10000]
-x_tick_labs = ['100', '1000', '10000']
+x_ticks = [1000, 10000, 100000]
 for (i, idx) in enumerate(plot_subset):
     ax[i].set(xticks=x_ticks, xscale='log', title=X_labels[idx])
     ax[i].set_ylim((-0.02,1.02))
+
+ax[1].set_yticks([])
+ax[2].set_yticks([])
 
 ax[0].set(ylabel='Confidence Bounds for $S_j$')
 ax[1].set_xlabel('Computational Budget $N$')
 ax[1].legend(loc='lower center', bbox_to_anchor=(0.5, -0.4), ncol=3, fancybox=True)
 ax[1].xaxis.labelpad = 12
+fig.subplots_adjust(wspace=0.075)
 
 # Save plots
 plt.savefig(FIG_DIR + 'CBMZ_bounds.png', bbox_inches="tight")
@@ -91,9 +94,19 @@ for (i, ax_) in enumerate(ax.ravel()[:d]):
     ax_.plot(sample_sizes, panin[:,i,1], color='purple', ls='-', alpha=0.9)
 
 
+
 for (i, ax_) in enumerate(ax.ravel()[:d]):
-    ax_.set(xticks=x_ticks, xscale='log', title=X_labels[i])
-    ax_.set_ylim((-0.02,1.02))
+    ax_.set(xscale='log', title=X_labels[i], ylim=(-0.02,1.02))
+    if i % 8 > 0:
+        ax_.set_yticks([])
+    if i < d - 8:
+        ax_.set_xticks([])
+    else:
+        ax_.set_xticks(x_ticks)
+
+#for i in range(13*7-d):
+#    ax[13,i].set_xticks(x_ticks)
+
 
 ax[6,0].set(ylabel='Confidence Bounds for $S_j$')
 ax[-1,3].set_xlabel('\t\t     Computational Budget $N$', fontsize=85)
@@ -102,6 +115,7 @@ ax[7,5].xaxis.labelpad = 25
 
 for i in range(5,8):
     ax[-1,i].axis('off')
+fig.subplots_adjust(wspace=0.09, hspace=0.12)
 
 # Save plots
 plt.savefig(FIG_DIR + 'CBMZ_full.png', bbox_inches="tight")
