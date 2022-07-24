@@ -37,7 +37,7 @@ plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
 
 
 ### Figure 1 ###
-fig, ax = plt.subplots(2, 5, figsize=(25,10))
+fig, ax = plt.subplots(2, 5, figsize=(25,20), gridspec_kw={'height_ratios': [3, 1]})
 
 floodgate = []
 spf = []
@@ -112,22 +112,23 @@ for i in range(d):
 x_ticks = [100, 1000, 10000, 100000]
 x_tick_labs = ['100', '1000', '10000', '100000']
 for i in range(d):
-    ax[0,i].set(xticks=x_ticks, xscale='log', title=X_labels[i])
+    ax[0,i].set(xscale='log', title=X_labels[i], ylim=(-.01,1))
     ax[1,i].set(xticks=x_ticks, xscale='log')
     ax[0,i].axhline(y=gt[i], color='red', ls=':', label='Target')
     ax[1,i].axhline(y=0.95, color='red', ls=':')
     ax[1,i].set_ylim((0,1.05))
-ax[0,0].set_ylim((-0.01,0.4))
-ax[0,1].set_ylim((-0.01,0.32))
-ax[0,2].set_ylim((0.1,0.95))
-ax[0,3].set_ylim((-0.01,0.32))
-ax[0,4].set_ylim((0.1,0.9))
+    if i > 0:
+        ax[0,i].set_yticks([])
+        ax[1,i].set_yticks([])
+    ax[0,i].set_xticks([])
+
 
 ax[0,0].set(ylabel='Confidence Bounds for $S_j$')
 ax[1,0].set(ylabel='Coverage')
 ax[1,2].set_xlabel('Computational Budget $N$', fontsize=HUGE_SIZE)
 ax[0,2].legend(loc='lower center', bbox_to_anchor=(0.5, -1.85), ncol=3, fancybox=True)
 ax[1,2].xaxis.labelpad = 15
+fig.subplots_adjust(wspace=0.08, hspace=0.05)
 
 # Save plots
 plt.savefig(FIG_DIR + 'Hymod_bounds.png', bbox_inches="tight")
@@ -193,11 +194,15 @@ for i in range(d):
 
 # Plot formatting
 for i in range(d):
-    ax[0,i].set(xticks=x_ticks, xscale='log', title=X_labels[i])
+    ax[0,i].set(xscale='log', title=X_labels[i])
     ax[1,i].set(xticks=x_ticks, xscale='log')   
     ax[1,i].axhline(y=0.95, color='red', ls=':')
     ax[0,i].set_ylim((0,1.01))
     ax[1,i].set_ylim((0,1.05))
+    if i > 0:
+        ax[0,i].set_yticks([])
+        ax[1,i].set_yticks([])
+    ax[0,i].set_xticks([])
 
 ax[0,2].plot([0], [20], color='red', ls=':', label="Target")
 ax[0,0].set(ylabel='Width of \nConfidence Intervals')
@@ -205,6 +210,7 @@ ax[1,0].set(ylabel='Coverage')
 ax[1,2].set_xlabel('Computational Budget $N$', fontsize=HUGE_SIZE)
 ax[0,2].legend(loc='lower center', bbox_to_anchor=(0.5, -1.85), ncol=3, fancybox=True)
 ax[1,2].xaxis.labelpad = 15
+fig.subplots_adjust(wspace=0.07, hspace=0.07)
 
 # Save plots
 plt.savefig(FIG_DIR + 'Hymod_panin_widths.png', bbox_inches="tight")
