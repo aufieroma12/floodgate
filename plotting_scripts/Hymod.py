@@ -21,11 +21,11 @@ gt = np.load(DATA_DIR.format('.','.') + 'ground_truth.npy')
 
 
 # Plot formatting
-SMALL_SIZE = 10
-MEDIUM_SIZE = 18
-BIG_SIZE = 20
-BIGGER_SIZE = 24
-HUGE_SIZE = 28
+SMALL_SIZE = 12
+MEDIUM_SIZE = 20
+BIG_SIZE = 24
+BIGGER_SIZE = 30
+HUGE_SIZE = 32
 
 plt.rc('font', size=SMALL_SIZE)          # controls default text sizes
 plt.rc('axes', titlesize=BIGGER_SIZE)     # fontsize of the axes title
@@ -142,6 +142,22 @@ plt.savefig(FIG_DIR + 'Hymod_bounds.png', bbox_inches="tight")
 
 
 ### Figure 2 ###
+# Plot formatting
+SMALL_SIZE = 10
+MEDIUM_SIZE = 18
+BIG_SIZE = 20
+BIGGER_SIZE = 24
+HUGE_SIZE = 28
+
+plt.rc('font', size=SMALL_SIZE)          # controls default text sizes
+plt.rc('axes', titlesize=BIGGER_SIZE)     # fontsize of the axes title
+plt.rc('axes', labelsize=BIGGER_SIZE)    # fontsize of the x and y labels
+plt.rc('xtick', labelsize=MEDIUM_SIZE)    # fontsize of the tick labels
+plt.rc('ytick', labelsize=MEDIUM_SIZE)    # fontsize of the tick labels
+plt.rc('legend', fontsize=BIG_SIZE)    # legend fontsize
+plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
+
+
 fig, ax = plt.subplots(2, 5, figsize=(25,10))
 
 floodgate = []
@@ -217,7 +233,7 @@ for i in range(d):
 ax[0,0].set(ylabel='Width of \nConfidence Intervals')
 ax[1,0].set(ylabel='Coverage')
 ax[1,2].set_xlabel('Computational Budget $N$', fontsize=HUGE_SIZE)
-ax[0,2].legend(loc='lower center', bbox_to_anchor=(0.5, -1.85), ncol=3, fancybox=True)
+ax[0,2].legend(loc='lower center', bbox_to_anchor=(0.5, -1.7), ncol=3, fancybox=True)
 ax[1,2].xaxis.labelpad = 15
 fig.subplots_adjust(wspace=0.07, hspace=0.07)
 
