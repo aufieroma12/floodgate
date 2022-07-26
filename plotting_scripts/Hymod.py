@@ -45,7 +45,7 @@ spf_surrogate = []
 
 # Floodgate, high-quality surrogate
 for fp in os.listdir(DATA_DIR.format('floodgate', '100000')):
-    floodgate.append(np.load(fp))
+    floodgate.append(np.load(DATA_DIR.format('floodgate', '100000') + fp))
 floodgate = np.array(floodgate)
 floodgate_mean = np.mean(floodgate, axis=0)
 floodgate_cov = np.mean((floodgate[:,:,:,0] < gt) * (floodgate[:,:,:,1] > gt), axis=0)
@@ -59,7 +59,7 @@ ax[0,2].plot([0], [20], color='grey', ls='--', label='Low-quality $f$')
 
 # Non-surrogate SPF
 for fp in os.listdir(DATA_DIR.format('spf', '.')):
-    spf.append(np.load(fp))
+    spf.append(np.load(DATA_DIR.format('spf', '.') + fp))
 spf = np.array(spf)
 spf_mean = np.mean(spf, axis=0)
 spf_cov = np.mean((spf[:,:,:,0] < gt) * (spf[:,:,:,1] > gt), axis=0)
@@ -73,7 +73,7 @@ ax[0,2].plot([0], [20], color='grey', ls='-', label='High-quality $f$')
 
 # Surrogate SPF, high-quality surrogate
 for fp in os.listdir(DATA_DIR.format('spf_surrogate', '100000')):
-    spf_surrogate.append(np.load(fp))
+    spf_surrogate.append(np.load(DATA_DIR.format('spf_surrogate', '100000') + fp))
 spf_surrogate = np.array(spf_surrogate)
 spf_surrogate_mean = np.mean(spf_surrogate, axis=0)
 spf_surrogate_cov = np.mean((spf_surrogate[:,:,:,0] < gt) * (spf_surrogate[:,:,:,1] > gt), axis=0)
@@ -83,9 +83,13 @@ for i in range(d):
     ax[0,i].plot(sample_sizes, spf_surrogate_mean[:,i,1], color='orange', ls='-')
     ax[1,i].plot(sample_sizes, spf_surrogate_cov[:,i], color='orange', alpha=0.6, ls='-')
 
+
+floodgate = []
+spf_surrogate = []
+
 # Floodgate, low-quality surrogate
 for fp in os.listdir(DATA_DIR.format('floodgate', '10000')):
-    floodgate.append(np.load(fp))
+    floodgate.append(np.load(DATA_DIR.format('floodgate', '10000') + fp))
 floodgate = np.array(floodgate)
 floodgate_mean = np.mean(floodgate, axis=0)
 floodgate_cov = np.mean((floodgate[:,:,:,0] < gt) * (floodgate[:,:,:,1] > gt), axis=0)
@@ -97,7 +101,7 @@ for i in range(d):
 
 # Surrogate SPF, low-quality surrogate
 for fp in os.listdir(DATA_DIR.format('spf_surrogate', '10000')):
-    spf_surrogate.append(np.load(fp))
+    spf_surrogate.append(np.load(DATA_DIR.format('spf_surrogate', '10000') + fp))
 spf_surrogate = np.array(spf_surrogate)
 spf_surrogate_mean = np.mean(spf_surrogate, axis=0)
 spf_surrogate_cov = np.mean((spf_surrogate[:,:,:,0] < gt) * (spf_surrogate[:,:,:,1] > gt), axis=0)
@@ -126,7 +130,7 @@ for i in range(d):
 ax[0,0].set(ylabel='Confidence Bounds for $S_j$')
 ax[1,0].set(ylabel='Coverage')
 ax[1,2].set_xlabel('Computational Budget $N$', fontsize=HUGE_SIZE)
-ax[0,2].legend(loc='lower center', bbox_to_anchor=(0.5, -1.85), ncol=3, fancybox=True)
+ax[0,2].legend(loc='lower center', bbox_to_anchor=(0.5, -.6), ncol=3, fancybox=True)
 ax[1,2].xaxis.labelpad = 15
 fig.subplots_adjust(wspace=0.08, hspace=0.05)
 
@@ -145,7 +149,7 @@ panin = []
 
 # Floodgate, high-quality surrogate
 for fp in os.listdir(DATA_DIR.format('floodgate', 100000)):
-    floodgate.append(np.load(fp))
+    floodgate.append(np.load(DATA_DIR.format('floodgate', '100000') + fp))
 floodgate = np.array(floodgate)
 floodgate_mean = np.mean(floodgate[:,:,:,1] - floodgate[:,:,:,0], axis=0)
 floodgate_cov = np.mean((floodgate[:,:,:,0] < gt) * (floodgate[:,:,:,1] > gt), axis=0)
@@ -158,7 +162,7 @@ ax[0,2].plot([0], [20], color='grey', ls='--', label='Low-quality $f$')
 
 # Panin bound, high-quality surrogate
 for fp in os.listdir(DATA_DIR.format('panin', 100000)):
-    panin.append(np.load(fp))
+    panin.append(np.load(DATA_DIR.format('panin', '100000') + fp))
 panin = np.array(panin)
 panin_mean = np.mean(panin[:,:,:,1] - panin[:,:,:,0], axis=0)
 panin_cov = np.mean((panin[:,:,:,0] < gt) * (panin[:,:,:,1] > gt), axis=0)
@@ -169,9 +173,13 @@ for i in range(d):
 
 ax[0,2].plot([0], [20], color='grey', ls='-', label='High-quality $f$')
 
+
+floodgate = []
+panin = []
+
 # Floodgate, low-quality surrogate
 for fp in os.listdir(DATA_DIR.format('floodgate', 10000)):
-    floodgate.append(np.load(fp))
+    floodgate.append(np.load(DATA_DIR.format('floodgate', '10000') + fp))
 floodgate = np.array(floodgate)
 floodgate_mean = np.mean(floodgate[:,:,:,1] - floodgate[:,:,:,0], axis=0)
 floodgate_cov = np.mean((floodgate[:,:,:,0] < gt) * (floodgate[:,:,:,1] > gt), axis=0)
@@ -182,7 +190,7 @@ for i in range(d):
 
 # Panin bound, low-quality surrogate
 for fp in os.listdir(DATA_DIR.format('panin', 10000)):
-    panin.append(np.load(fp))
+    panin.append(np.load(DATA_DIR.format('panin', '10000') + fp))
 panin = np.array(panin)
 panin_mean = np.mean(panin[:,:,:,1] - panin[:,:,:,0], axis=0)
 panin_cov = np.mean((panin[:,:,:,0] < gt) * (panin[:,:,:,1] > gt), axis=0)
@@ -190,6 +198,8 @@ panin_cov = np.mean((panin[:,:,:,0] < gt) * (panin[:,:,:,1] > gt), axis=0)
 for i in range(d):
     ax[0,i].plot(sample_sizes, panin_mean[:,i], color='purple', ls='--')
     ax[1,i].plot(sample_sizes, panin_cov[:,i], color='purple', alpha=0.6, ls='--')
+
+ax[0,2].plot([0], [20], color='red', ls=':', label="Target")
 
 
 # Plot formatting
@@ -204,7 +214,6 @@ for i in range(d):
         ax[1,i].set_yticks([])
     ax[0,i].set_xticks([])
 
-ax[0,2].plot([0], [20], color='red', ls=':', label="Target")
 ax[0,0].set(ylabel='Width of \nConfidence Intervals')
 ax[1,0].set(ylabel='Coverage')
 ax[1,2].set_xlabel('Computational Budget $N$', fontsize=HUGE_SIZE)
