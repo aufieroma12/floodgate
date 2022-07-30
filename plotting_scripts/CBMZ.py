@@ -39,14 +39,14 @@ spf = np.load(DATA_PATH.format('spf'))
 panin = np.load(DATA_PATH.format('panin'))
 
 for (i, idx) in enumerate(plot_subset):
-    ax[i].plot(sample_sizes, floodgate[:,idx,0], color='green', ls='-', alpha=0.9, label='Floodgate')
-    ax[i].plot(sample_sizes, floodgate[:,idx,1], color='green', ls='-', alpha=0.9)
+    ax[i].plot(sample_sizes, floodgate[:,idx,0], color='green', ls='-', lw=3, label='Floodgate')
+    ax[i].plot(sample_sizes, floodgate[:,idx,1], color='green', ls='-', lw=3)
 
-    ax[i].plot(sample_sizes, spf[:,idx,0], color='orange', ls='-', alpha=0.9, label='SPF $f$')
-    ax[i].plot(sample_sizes, spf[:,idx,1], color='orange', ls='-', alpha=0.9)
+    ax[i].plot(sample_sizes, spf[:,idx,0], color='orange', ls='-', lw=3, label='SPF $f$')
+    ax[i].plot(sample_sizes, spf[:,idx,1], color='orange', ls='-', lw=3)
 
-    ax[i].plot(sample_sizes, panin[:,idx,0], color='purple', ls='-', alpha=0.9, label='Panin Bounds')
-    ax[i].plot(sample_sizes, panin[:,idx,1], color='purple', ls='-', alpha=0.9)
+    ax[i].plot(sample_sizes, panin[:,idx,0], color='purple', ls='-', lw=3, label='Panin Bounds')
+    ax[i].plot(sample_sizes, panin[:,idx,1], color='purple', ls='-', lw=3)
 
 
 x_ticks = [1000, 10000, 100000]
@@ -61,7 +61,7 @@ ax[0].set(ylabel='Confidence Bounds for $S_j$')
 ax[1].set_xlabel('Computational Budget $N$')
 ax[1].legend(loc='lower center', bbox_to_anchor=(0.5, -0.4), ncol=3, fancybox=True)
 ax[1].xaxis.labelpad = 12
-fig.subplots_adjust(wspace=0.075)
+fig.subplots_adjust(wspace=0.035)
 
 # Save plots
 plt.savefig(FIG_DIR + 'CBMZ_bounds.png', bbox_inches="tight")
@@ -84,14 +84,14 @@ plt.rc('figure', titlesize=60)   # fontsize of the figure title
 fig, ax = plt.subplots(13, 8, figsize=(85,130))
 
 for (i, ax_) in enumerate(ax.ravel()[:d]):
-    ax_.plot(sample_sizes, floodgate[:,i,0], color='green', ls='-', alpha=0.9, label='Floodgate')
-    ax_.plot(sample_sizes, floodgate[:,i,1], color='green', ls='-', alpha=0.9)
+    ax_.plot(sample_sizes, floodgate[:,i,0], color='green', ls='-', lw=3, label='Floodgate')
+    ax_.plot(sample_sizes, floodgate[:,i,1], color='green', ls='-', lw=3)
 
-    ax_.plot(sample_sizes, spf[:,i,0], color='orange', ls='-', alpha=0.9, label='SPF $f$')
-    ax_.plot(sample_sizes, spf[:,i,1], color='orange', ls='-', alpha=0.9)
+    ax_.plot(sample_sizes, spf[:,i,0], color='orange', ls='-', lw=3, label='SPF $f$')
+    ax_.plot(sample_sizes, spf[:,i,1], color='orange', ls='-', lw=3)
 
-    ax_.plot(sample_sizes, panin[:,i,0], color='purple', ls='-', alpha=0.9, label='Panin Bounds')
-    ax_.plot(sample_sizes, panin[:,i,1], color='purple', ls='-', alpha=0.9)
+    ax_.plot(sample_sizes, panin[:,i,0], color='purple', ls='-', lw=3, label='Panin Bounds')
+    ax_.plot(sample_sizes, panin[:,i,1], color='purple', ls='-', lw=3)
 
 
 
@@ -104,9 +104,6 @@ for (i, ax_) in enumerate(ax.ravel()[:d]):
     else:
         ax_.set_xticks(x_ticks)
 
-#for i in range(13*7-d):
-#    ax[13,i].set_xticks(x_ticks)
-
 
 ax[6,0].set(ylabel='Confidence Bounds for $S_j$')
 ax[-1,3].set_xlabel('\t\t     Computational Budget $N$', fontsize=85)
@@ -115,7 +112,7 @@ ax[7,5].xaxis.labelpad = 25
 
 for i in range(5,8):
     ax[-1,i].axis('off')
-fig.subplots_adjust(wspace=0.09, hspace=0.12)
+fig.subplots_adjust(wspace=0.04, hspace=0.12)
 
 # Save plots
 plt.savefig(FIG_DIR + 'CBMZ_full.png', bbox_inches="tight")
