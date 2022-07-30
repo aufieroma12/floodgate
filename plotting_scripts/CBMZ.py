@@ -23,6 +23,8 @@ plot_subset = [2, 45, 10]
 
 ### Figure 3 ###
 # Plot formatting
+lw = 2
+
 plt.rc('font', size=6)           # controls default text sizes
 plt.rc('axes', titlesize=18)     # fontsize of the axes title
 plt.rc('axes', labelsize=20)     # fontsize of the x and y labels
@@ -39,14 +41,14 @@ spf = np.load(DATA_PATH.format('spf'))
 panin = np.load(DATA_PATH.format('panin'))
 
 for (i, idx) in enumerate(plot_subset):
-    ax[i].plot(sample_sizes, floodgate[:,idx,0], color='green', ls='-', lw=3, label='Floodgate')
-    ax[i].plot(sample_sizes, floodgate[:,idx,1], color='green', ls='-', lw=3)
+    ax[i].plot(sample_sizes, floodgate[:,idx,0], color='green', ls='-', lw=lw, label='Floodgate')
+    ax[i].plot(sample_sizes, floodgate[:,idx,1], color='green', ls='-', lw=lw)
 
-    ax[i].plot(sample_sizes, spf[:,idx,0], color='orange', ls='-', lw=3, label='SPF $f$')
-    ax[i].plot(sample_sizes, spf[:,idx,1], color='orange', ls='-', lw=3)
+    ax[i].plot(sample_sizes, spf[:,idx,0], color='orange', ls='-', lw=lw, label='SPF $f$')
+    ax[i].plot(sample_sizes, spf[:,idx,1], color='orange', ls='-', lw=lw)
 
-    ax[i].plot(sample_sizes, panin[:,idx,0], color='purple', ls='-', lw=3, label='Panin Bounds')
-    ax[i].plot(sample_sizes, panin[:,idx,1], color='purple', ls='-', lw=3)
+    ax[i].plot(sample_sizes, panin[:,idx,0], color='purple', ls='-', lw=lw, label='Panin Bounds')
+    ax[i].plot(sample_sizes, panin[:,idx,1], color='purple', ls='-', lw=lw)
 
 
 x_ticks = [1000, 10000, 100000]
@@ -72,6 +74,8 @@ plt.savefig(FIG_DIR + 'CBMZ_bounds.png', bbox_inches="tight")
 
 ### Figure 4 ###
 # Plot formatting
+lw = 2.5
+
 plt.rc('font', size=24)          # controls default text sizes
 plt.rc('axes', titlesize=42)     # fontsize of the axes title
 plt.rc('axes', labelsize=85)     # fontsize of the x and y labels
@@ -84,14 +88,14 @@ plt.rc('figure', titlesize=60)   # fontsize of the figure title
 fig, ax = plt.subplots(13, 8, figsize=(85,130))
 
 for (i, ax_) in enumerate(ax.ravel()[:d]):
-    ax_.plot(sample_sizes, floodgate[:,i,0], color='green', ls='-', lw=3, label='Floodgate')
-    ax_.plot(sample_sizes, floodgate[:,i,1], color='green', ls='-', lw=3)
+    ax_.plot(sample_sizes, floodgate[:,i,0], color='green', ls='-', lw=lw, label='Floodgate')
+    ax_.plot(sample_sizes, floodgate[:,i,1], color='green', ls='-', lw=lw)
 
-    ax_.plot(sample_sizes, spf[:,i,0], color='orange', ls='-', lw=3, label='SPF $f$')
-    ax_.plot(sample_sizes, spf[:,i,1], color='orange', ls='-', lw=3)
+    ax_.plot(sample_sizes, spf[:,i,0], color='orange', ls='-', lw=lw, label='SPF $f$')
+    ax_.plot(sample_sizes, spf[:,i,1], color='orange', ls='-', lw=lw)
 
-    ax_.plot(sample_sizes, panin[:,i,0], color='purple', ls='-', lw=3, label='Panin Bounds')
-    ax_.plot(sample_sizes, panin[:,i,1], color='purple', ls='-', lw=3)
+    ax_.plot(sample_sizes, panin[:,i,0], color='purple', ls='-', lw=lw, label='Panin Bounds')
+    ax_.plot(sample_sizes, panin[:,i,1], color='purple', ls='-', lw=lw)
 
 
 
