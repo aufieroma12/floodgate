@@ -145,12 +145,6 @@ plt.savefig(FIG_DIR + 'Hymod_bounds.png', bbox_inches="tight")
 
 ### Figure 2 ###
 # Plot formatting
-SMALL_SIZE = 10
-MEDIUM_SIZE = 18
-BIG_SIZE = 20
-BIGGER_SIZE = 24
-HUGE_SIZE = 28
-
 plt.rc('font', size=SMALL_SIZE)          # controls default text sizes
 plt.rc('axes', titlesize=BIGGER_SIZE)     # fontsize of the axes title
 plt.rc('axes', labelsize=BIGGER_SIZE)    # fontsize of the x and y labels
