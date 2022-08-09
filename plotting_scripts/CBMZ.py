@@ -77,16 +77,16 @@ plt.savefig(FIG_DIR + 'CBMZ_bounds.png', bbox_inches="tight")
 lw = 2.5
 ncols = 9
 
-plt.rc('font', size=28)          # controls default text sizes
-plt.rc('axes', titlesize=45)     # fontsize of the axes title
-plt.rc('axes', labelsize=90)     # fontsize of the x and y labels
-plt.rc('xtick', labelsize=42)    # fontsize of the tick labels
-plt.rc('ytick', labelsize=42)    # fontsize of the tick labels
-plt.rc('legend', fontsize=60)    # legend fontsize
-plt.rc('figure', titlesize=70)   # fontsize of the figure title
+plt.rc('font', size=32)          # controls default text sizes
+plt.rc('axes', titlesize=60)     # fontsize of the axes title
+plt.rc('axes', labelsize=110)     # fontsize of the x and y labels
+plt.rc('xtick', labelsize=55)    # fontsize of the tick labels
+plt.rc('ytick', labelsize=55)    # fontsize of the tick labels
+plt.rc('legend', fontsize=80)    # legend fontsize
+plt.rc('figure', titlesize=90)   # fontsize of the figure title
 
 
-fig, ax = plt.subplots(12, ncols, figsize=(95,120))
+fig, ax = plt.subplots(12, ncols, figsize=(100,120))
 
 for (i, ax_) in enumerate(ax.ravel()[:d]):
     ax_.plot(sample_sizes, floodgate[:,i,0], color='green', ls='-', lw=lw, label='Floodgate')
@@ -111,7 +111,7 @@ for (i, ax_) in enumerate(ax.ravel()[:d]):
 
 
 ax[6,0].set(ylabel='\t\t   Confidence Bounds for $S_j$')
-ax[-2,4].set_xlabel('Computational Budget $N$', fontsize=85, labelpad=550)
+ax[-2,4].set_xlabel('Computational Budget $N$', fontsize=110, labelpad=550)
 ax[-2,4].legend(loc='lower center', bbox_to_anchor=(0.5, -1.75), ncol=3, fancybox=True)
 ax[7,5].xaxis.labelpad = 25
 
