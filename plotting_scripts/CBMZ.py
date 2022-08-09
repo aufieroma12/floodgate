@@ -75,17 +75,18 @@ plt.savefig(FIG_DIR + 'CBMZ_bounds.png', bbox_inches="tight")
 ### Figure 4 ###
 # Plot formatting
 lw = 2.5
+ncols = 9
 
-plt.rc('font', size=24)          # controls default text sizes
-plt.rc('axes', titlesize=42)     # fontsize of the axes title
-plt.rc('axes', labelsize=85)     # fontsize of the x and y labels
-plt.rc('xtick', labelsize=38)    # fontsize of the tick labels
-plt.rc('ytick', labelsize=38)    # fontsize of the tick labels
-plt.rc('legend', fontsize=55)    # legend fontsize
-plt.rc('figure', titlesize=60)   # fontsize of the figure title
+plt.rc('font', size=28)          # controls default text sizes
+plt.rc('axes', titlesize=45)     # fontsize of the axes title
+plt.rc('axes', labelsize=90)     # fontsize of the x and y labels
+plt.rc('xtick', labelsize=42)    # fontsize of the tick labels
+plt.rc('ytick', labelsize=42)    # fontsize of the tick labels
+plt.rc('legend', fontsize=60)    # legend fontsize
+plt.rc('figure', titlesize=70)   # fontsize of the figure title
 
 
-fig, ax = plt.subplots(13, 8, figsize=(85,130))
+fig, ax = plt.subplots(12, ncols, figsize=(95,120))
 
 for (i, ax_) in enumerate(ax.ravel()[:d]):
     ax_.plot(sample_sizes, floodgate[:,i,0], color='green', ls='-', lw=lw, label='Floodgate')
@@ -101,20 +102,20 @@ for (i, ax_) in enumerate(ax.ravel()[:d]):
 
 for (i, ax_) in enumerate(ax.ravel()[:d]):
     ax_.set(xscale='log', title=X_labels[i], ylim=(-0.02,1.02))
-    if i % 8 > 0:
+    if i % ncols > 0:
         ax_.set_yticks([])
-    if i < d - 8:
+    if i < d - ncols:
         ax_.set_xticks([])
     else:
         ax_.set_xticks(x_ticks)
 
 
-ax[6,0].set(ylabel='Confidence Bounds for $S_j$')
-ax[-1,3].set_xlabel('\t\t     Computational Budget $N$', fontsize=85)
-ax[-1,3].legend(loc='lower center', bbox_to_anchor=(1.09, -0.65), ncol=3, fancybox=True)
+ax[6,0].set(ylabel='\t\t   Confidence Bounds for $S_j$')
+ax[-2,4].set_xlabel('Computational Budget $N$', fontsize=85, labelpad=550)
+ax[-2,4].legend(loc='lower center', bbox_to_anchor=(0.5, -1.75), ncol=3, fancybox=True)
 ax[7,5].xaxis.labelpad = 25
 
-for i in range(5,8):
+for i in range(2, ncols):
     ax[-1,i].axis('off')
 fig.subplots_adjust(wspace=0.04, hspace=0.12)
 
