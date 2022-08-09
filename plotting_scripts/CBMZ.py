@@ -79,10 +79,10 @@ ncols = 9
 
 plt.rc('font', size=32)          # controls default text sizes
 plt.rc('axes', titlesize=60)     # fontsize of the axes title
-plt.rc('axes', labelsize=115)     # fontsize of the x and y labels
+plt.rc('axes', labelsize=120)     # fontsize of the x and y labels
 plt.rc('xtick', labelsize=52)    # fontsize of the tick labels
 plt.rc('ytick', labelsize=52)    # fontsize of the tick labels
-plt.rc('legend', fontsize=100)    # legend fontsize
+plt.rc('legend', fontsize=120)    # legend fontsize
 plt.rc('figure', titlesize=90)   # fontsize of the figure title
 
 
@@ -111,8 +111,8 @@ for (i, ax_) in enumerate(ax.ravel()[:d]):
 
 
 ax[6,0].set(ylabel='\t\t   Confidence Bounds for $S_j$')
-ax[-2,4].set_xlabel('Computational Budget $N$', fontsize=115, labelpad=550)
-ax[-2,4].legend(loc='lower center', bbox_to_anchor=(0.5, -1.88), ncol=3, fancybox=True)
+ax[-2,4].set_xlabel('Computational Budget $N$', fontsize=120, labelpad=550)
+ax[-2,4].legend(loc='lower center', bbox_to_anchor=(0.5, -1.95), ncol=3, fancybox=True)
 ax[7,5].xaxis.labelpad = 25
 
 for i in range(2, ncols):
