@@ -1,5 +1,5 @@
 # Floodgate for Sensitivity Analysis
-This repository contains the source code accompanying our paper: Aufiero, Massimo and Janson, Lucas. "Surrogate-based global sensitivity analysis with statistical guarantees via floodgate." arXiv preprint ___ (2022).
+This repository contains the source code accompanying our paper: Aufiero, Massimo and Janson, Lucas. "Surrogate-based global sensitivity analysis with statistical guarantees via floodgate." arXiv preprint [arXiv:2208.05885](https://arxiv.org/abs/2208.05885) (2022).
 
 Any questions or concerns can be sent to Massimo Aufiero at aufieroma12@gmail.com.
 
