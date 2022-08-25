@@ -9,8 +9,7 @@ Random_seeds = {
     "Hymod_analysis": 4000
 }
 
-BASE_DIR = '/n/home13/aufieroma/floodgate/' 
-# BASE_DIR = '/Users/Massimo/Documents_offline/Research/floodgate/'
+BASE_DIR = '' 
 
 KRR_hyperparams = {
     100: (np.logspace(-8, 3, 30), np.logspace(-5, 4, 20)),
