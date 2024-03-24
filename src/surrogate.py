@@ -1,23 +1,18 @@
 import os
-import numpy as np
 from abc import ABC, abstractmethod
 
+import numpy as np
+import tensorflow.compat.v1 as tf
 from sklearn.linear_model import LinearRegression, Lasso, LassoCV
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.kernel_ridge import KernelRidge
 from sklearn.neighbors import KNeighborsRegressor as KNN
 from sklearn.model_selection import GridSearchCV
+from safepython.model_execution import model_execution # module to execute the model
+from safepython import HyMod
 
-import tensorflow.compat.v1 as tf
-
-from SAFEpython.model_execution import model_execution # module to execute the model
-from SAFEpython import HyMod
-
-from build_nn import build_model
-
-import sys
-sys.path.append("../config/")
 from config import BASE_DIR, Hymod_inputs
+from src.build_nn import build_model
 
 
 def batched(batch_size):

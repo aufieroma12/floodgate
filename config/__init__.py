@@ -9,7 +9,7 @@ Random_seeds = {
     "Hymod_analysis": 4000
 }
 
-BASE_DIR = '' 
+BASE_DIR = ''
 
 KRR_hyperparams = {
     100: (np.logspace(-8, 3, 30), np.logspace(-5, 4, 20)),
@@ -28,7 +28,7 @@ Hymod_inputs = {
 
 conc_ranges = np.array(pd.read_csv(BASE_DIR + 'CBMZ/data/ranges/conc_range.csv'))
 CBMZ_inputs = {
-    "labels": 
+    "labels":
     [
       "H2SO4",
       "HNO3",
@@ -137,4 +137,3 @@ CBMZ_inputs = {
     "xmax": conc_ranges[1],
     "MODEL_PATH": "models/{}_FINAL_O3_multistep_16_20200118_NoNoiseNoSpinup_16_1_2b_256ls_16s_0d_1024_0.00128_o3pmfocusloss2_1RunNumber.h5"
 }
-

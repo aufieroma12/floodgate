@@ -3,12 +3,8 @@ from time import time
 import argparse
 import os
 
-import sys
-sys.path.append('../../src')
-sys.path.append('../../config')
-
-from sensitivity import SPF
-from surrogate import Hymod
+from src.sensitivity import SPF
+from src.surrogate import Hymod
 from config import Hymod_inputs, Random_seeds
 
 parser = argparse.ArgumentParser()
