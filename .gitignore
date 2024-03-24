@@ -5,3 +5,4 @@
 **/.idea
 **/data/analysis/
 Hymod/data/outputs/
+.venv
