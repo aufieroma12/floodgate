@@ -9,8 +9,6 @@ from sklearn.neighbors import KNeighborsRegressor as KNN
 from sklearn.model_selection import GridSearchCV
 
 import tensorflow.compat.v1 as tf
-from tensorflow.keras.callbacks import ModelCheckpoint
-import pickle
 
 from SAFEpython.model_execution import model_execution # module to execute the model
 from SAFEpython import HyMod
