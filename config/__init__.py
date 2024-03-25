@@ -6,7 +6,11 @@ Random_seeds = {
     "Hymod_train": 1000,
     "Hymod_validation": 2000,
     "Hymod_inputs": 3000,
-    "Hymod_analysis": 4000
+    "Hymod_analysis": 4000,
+    "Ishigami_train": 5000,
+    "Ishigami_validation": 6000,
+    "Ishigami_inputs": 7000,
+    "Ishigami_analysis": 8000,
 }
 
 BASE_DIR = ''
@@ -24,6 +28,11 @@ Hymod_inputs = {
     "min": np.array([0, 0, 0, 0, 0.1]),
     "max": np.array([400, 2, 1, 0.1, 1]),
     "FORCING_PATH": BASE_DIR + 'Hymod/data/inputs/LeafCatch.txt'
+}
+
+Ishigami_inputs = {
+    "min": np.ones(3) * -np.pi,
+    "max": np.ones(3) * np.pi,
 }
 
 conc_ranges = np.array(pd.read_csv(BASE_DIR + 'CBMZ/data/ranges/conc_range.csv'))

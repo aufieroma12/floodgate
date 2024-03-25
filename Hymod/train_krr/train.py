@@ -5,14 +5,9 @@ import argparse
 import os
 
 import warnings
-from sklearn.exceptions import ConvergenceWarning
 warnings.filterwarnings('ignore')
 
-import sys
-sys.path.append('../../src/')
-sys.path.append('../../config/')
-
-from surrogate import Hymod, KRRcv
+from src.surrogate import Hymod, KRRcv
 from config import Hymod_inputs, KRR_hyperparams, Random_seeds
 
 parser = argparse.ArgumentParser()

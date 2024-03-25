@@ -7,12 +7,8 @@ import joblib
 import warnings
 warnings.filterwarnings('ignore')
 
-import sys
-sys.path.append('../../src')
-sys.path.append('../../config')
-
-from sensitivity import combined_surrogate_methods
-from surrogate import KRRcv, Hymod
+from src.sensitivity import combined_surrogate_methods
+from src.surrogate import Hymod
 from config import Hymod_inputs, Random_seeds
 
 

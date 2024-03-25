@@ -70,6 +70,19 @@ class Hymod(Surrogate):
 
     def predict(self, X):
         return self.model(X)
+
+
+
+class Ishigami(Surrogate):
+
+    def __init__(self):
+        super().__init__(None)
+
+    def fit(self, X, y):
+        pass
+
+    def predict(self, X):
+        return np.sin(X[:,0]) + 7*np.sin(X[:,1])**2 + 0.1*X[:,2]**4*np.sin(X[:,0])
     
 
 
