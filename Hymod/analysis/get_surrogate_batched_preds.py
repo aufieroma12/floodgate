@@ -62,7 +62,7 @@ if __name__ == "__main__":
     )
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-    np.random.seed(Random_seeds["Hymod_inputs"] + index)
+    np.random.seed(Random_seeds["Hymod_gt"] + index)
     X = np.random.rand(n, d) @ np.diag(xmax - xmin) + np.ones((n, d)) @ np.diag(xmin)
     MODEL_PATH = Path(__file__).parents[1] / "models" / f"n_{train_size}.pkl"
 
@@ -73,4 +73,4 @@ if __name__ == "__main__":
     preds = get_all_preds(X, f, xmin, xmax)
     print(f"Total model evalutations ({n * (d + 1)}): {(time() - t1): .2f} seconds")
 
-    np.save(OUTPUT_DIR / f"{index}_again.npy", preds)
+    np.save(OUTPUT_DIR / f"{index}.npy", preds)
