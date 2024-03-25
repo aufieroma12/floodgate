@@ -11,6 +11,7 @@ Random_seeds = {
     "Ishigami_validation": 6000,
     "Ishigami_inputs": 7000,
     "Ishigami_analysis": 8000,
+    "Hymod_gt": 9000,
 }
 
 BASE_DIR = ''
