@@ -72,18 +72,23 @@ class Hymod(Surrogate):
         return self.model(X)
 
 
-
 class Ishigami(Surrogate):
 
-    def __init__(self):
+    def __init__(self, a = 1, b = 7, c = 0.1):
         super().__init__(None)
+        self.a = a
+        self.b = b
+        self.c = c
 
     def fit(self, X, y):
         pass
 
     def predict(self, X):
-        return np.sin(X[:,0]) + 7*np.sin(X[:,1])**2 + 0.1*X[:,2]**4*np.sin(X[:,0])
-    
+        return (
+            self.a * np.sin(X[:,0]) +
+            self.b * np.sin(X[:,1])**2 +
+            self.c * X[:,2]**4 * np.sin(X[:,0])
+        )
 
 
 class LinReg(Surrogate):

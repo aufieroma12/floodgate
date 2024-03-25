@@ -1,6 +1,6 @@
 import numpy as np
 from scipy.stats import norm
-from util import get_knockoffs
+from src.util import get_knockoffs
 
 def floodgate(inputs, f, xmin, xmax, K=50, alpha=0.05, batch_size=1, fstar=None, Y=None, ind=None):
     if fstar is None and Y is None:
