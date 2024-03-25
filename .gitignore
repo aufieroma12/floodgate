@@ -4,5 +4,7 @@
 **/.ipynb_checkpoints/
 **/.idea
 **/data/analysis/
+*.egg-info
 Hymod/data/outputs/
 .venv
+
