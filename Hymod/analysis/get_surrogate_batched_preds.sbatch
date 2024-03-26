@@ -5,7 +5,7 @@
 #SBATCH -p janson # Partition to run job on
 #SBATCH -c 1 # Number of cores
 #SBATCH -t 0-4:30 # Running time of 4.5 hours
-#SBATCH --mem 8000 # Memory request of 8 GB
+#SBATCH --mem 32000 # Memory request of 32 GB
 #SBATCH -o Hymod/log/analysis/n_100000_preds/%A_%a.out # Standard output
 #SBATCH -e Hymod/log/analysis/n_100000_preds/%A_%a.err # Standard error
 # Load modules and run
