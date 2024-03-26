@@ -205,7 +205,3 @@ class KelpNN(Surrogate):
         y_preds = full_pred[:,-1,10]
 
         return y_preds
-
-
-
-        

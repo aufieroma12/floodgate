@@ -4,12 +4,10 @@ import sys
 from pathlib import Path
 from time import time
 
-
 import joblib
 import numpy as np
 
 from config import Hymod_inputs, Random_seeds
-from src.surrogate import Surrogate
 from src.util import get_knockoffs
 
 # Input ranges
@@ -19,7 +17,7 @@ d = xmax.shape[0]
 
 
 def get_all_preds(
-    X: np.ndarray, f: Surrogate, xmin: np.ndarray, xmax: np.ndarray
+    X: np.ndarray, f, xmin: np.ndarray, xmax: np.ndarray
 ) -> np.ndarray:
     n, d = X.shape
     ind = list(np.arange(d))
