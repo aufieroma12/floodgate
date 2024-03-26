@@ -66,11 +66,14 @@ if __name__ == "__main__":
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
     np.random.seed(Random_seeds["Hymod_gt"] + index)
+    print(f"Generating {n} x {d} input matrix")
     X = np.random.rand(n, d) @ np.diag(xmax - xmin) + np.ones((n, d)) @ np.diag(xmin)
+    print(f"Input shape: {X.shape}")
     MODEL_PATH = Path(__file__).parents[1] / "models" / f"n_{train_size}.pkl"
 
     sys.path.append(str(Path(__file__).parents[2] / "src"))
     f = joblib.load(MODEL_PATH)
+    print("Loaded model")
 
     t1 = time()
     preds = get_all_preds(X, f, xmin, xmax)
