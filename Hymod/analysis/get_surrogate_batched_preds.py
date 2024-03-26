@@ -1,6 +1,5 @@
 import argparse
 import os
-import sys
 from pathlib import Path
 from time import time
 
@@ -69,7 +68,6 @@ if __name__ == "__main__":
     print(f"Input shape: {X.shape}")
     MODEL_PATH = Path(__file__).parents[1] / "models" / f"n_{train_size}.pkl"
 
-    sys.path.append(str(Path(__file__).parents[2] / "src"))
     f = joblib.load(MODEL_PATH)
     print("Loaded model")
 

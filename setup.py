@@ -9,7 +9,6 @@ setup(
     install_requires=[
         "scikit-learn<=1.1.1",
         "numpy",
-        "tensorflow",
         "safepython",
         "joblib",
         "matplotlib",
