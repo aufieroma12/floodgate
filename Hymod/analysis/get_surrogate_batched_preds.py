@@ -24,8 +24,11 @@ def get_all_preds(
     n, d = X.shape
     ind = list(np.arange(d))
 
+    print("Making original predictions.")
     all_preds = [f.predict(X)]
+
     for X_ind in ind:
+        print(f"Making knockoff predictions for index {X_ind}.")
         knockoffs = get_knockoffs(X, X_ind, xmin, xmax, 1)
         all_preds.append(f.predict(knockoffs))
 
