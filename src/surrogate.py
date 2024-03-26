@@ -8,10 +8,10 @@ from sklearn.preprocessing import PolynomialFeatures
 from sklearn.kernel_ridge import KernelRidge
 from sklearn.neighbors import KNeighborsRegressor as KNN
 from sklearn.model_selection import GridSearchCV
-from safepython.model_execution import model_execution # module to execute the model
+from safepython.model_execution import model_execution
 from safepython import HyMod
 
-from config import BASE_DIR, Hymod_inputs
+from config import Hymod_inputs
 from src.build_nn import build_model
 
 
