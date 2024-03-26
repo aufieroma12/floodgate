@@ -1,20 +1,11 @@
-import numpy as np
-import pandas as pd
-import pickle
-from time import time 
 import os
+from time import time
 
-import tensorflow.compat.v1 as tf
-from tensorflow.keras.callbacks import ModelCheckpoint
-from tensorflow.keras import backend as K
+import numpy as np
 
-import sys
-sys.path.append('../../src/')
-sys.path.append('../../config/')
-
-from sensitivity import combined_surrogate_methods
-from surrogate import KelpNN
-from config import CBMZ_inputs, Random_seeds, BASE_DIR
+from src.sensitivity import combined_surrogate_methods
+from src.surrogate import KelpNN
+from config import CBMZ_inputs, Random_seeds
 
 import warnings
 warnings.filterwarnings('ignore')
