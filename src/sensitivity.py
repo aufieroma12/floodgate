@@ -106,7 +106,7 @@ def panin_bound(Mjf, Vf, M, V, z):
     Sig = np.cov(np.vstack((Mjf,Vf,M,V)))
     Mjf = np.mean(Mjf)
     Vf = np.mean(Vf)
-    M = np.mean(M)
+    M = max(np.mean(M), 1e-15)  # For numerical stability since M can be 0 when f = f*
     V = np.mean(V)
 
     if V >= Vf:

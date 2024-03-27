@@ -10,7 +10,7 @@ from src.surrogate import Ishigami
 
 from config import Random_seeds, Ishigami_inputs
 
-N = int(1e3)
+N = int(1e4)
 xmin = Ishigami_inputs["min"]
 xmax = Ishigami_inputs["max"]
 d = xmax.shape[0]
@@ -63,9 +63,6 @@ if __name__ == "__main__":
     print(f"MSE: {analytical_mse(f.a, f.b, f.c):.5f}")
 
     for i in range(1000):
-        if i % 100 == 0:
-            print(f'Evaluating dataset {i}:')
-
         data_path = DATA_DIR / "outputs" / f"{i}.npy"
         os.makedirs(data_path.parent, exist_ok=True)
         if os.path.exists(data_path):
@@ -85,7 +82,7 @@ if __name__ == "__main__":
 
         t1 = time()
         floodgate_results, spf_results, panin_results = combined_surrogate_methods(
-            X, f, xmin, xmax, Y=y
+            X, f, xmin, xmax, Y=y, K=1
         )
 
         np.save(FLOODGATE_OUTPUT_DIR / f"{i}.npy", np.array(floodgate_results))
