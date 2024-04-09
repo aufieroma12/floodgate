@@ -4,7 +4,7 @@ from pathlib import Path
 import numpy as np
 
 DATA_DIR = Path(__file__).parents[1] / "data"
-PREDS_DIR = DATA_DIR / "outputs" / "hymod_surrogate_preds"
+PREDS_DIR = DATA_DIR / "outputs" / "surrogate_100000_preds"
 OUTPUT_PATH = DATA_DIR / "analysis" / "ground_truth_surrogate_100000.npy"
 
 
