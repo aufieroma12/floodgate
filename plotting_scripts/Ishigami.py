@@ -9,7 +9,7 @@ from src.analytical import S1, S2, S3, VAR_F
 from src.surrogate import Ishigami
 
 FIG_DIR = Path(__file__).parents[1] / "figs"
-DATA_DIR = Path(__file__).parents[1] / "ishigami" / "data" / "analysis"
+DATA_DIR = Path(__file__).parents[1] / "ishigami" / "data_big" / "analysis"
 
 if not os.path.exists(FIG_DIR):
     os.mkdir(FIG_DIR)
