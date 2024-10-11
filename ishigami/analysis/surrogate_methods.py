@@ -9,12 +9,12 @@ from src.surrogate import Ishigami
 
 from config import Random_seeds, Ishigami_inputs
 
-N = int(1e5)
+N = int(1e6)
 xmin = Ishigami_inputs["min"]
 xmax = Ishigami_inputs["max"]
 d = xmax.shape[0]
 
-DATA_DIR = Path(__file__).parents[1] / "data"
+DATA_DIR = Path(__file__).parents[1] / "data_big"
 OUTPUT_DIR = DATA_DIR / "analysis"
 
 mu = np.array([0, 0, 0])
@@ -93,7 +93,7 @@ if __name__ == "__main__":
         np.random.seed(Random_seeds["Ishigami_analysis"] + i)
 
         floodgate_results, spf_results, panin_results = combined_surrogate_methods(
-            X, f, mu, Sigma, Y=y, K=100
+            X, f, mu, Sigma, Y=y, K=5
         )
 
         np.save(FLOODGATE_OUTPUT_DIR / f"{i}.npy", np.array(floodgate_results))
