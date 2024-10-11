@@ -5,6 +5,8 @@ from matplotlib import pyplot as plt
 import os
 
 from ishigami.analysis.surrogate_methods import analytical_mse
+from src.analytical import S1, S2, S3, VAR_F
+from src.surrogate import Ishigami
 
 FIG_DIR = Path(__file__).parents[1] / "figs"
 DATA_DIR = Path(__file__).parents[1] / "ishigami" / "data" / "analysis"
@@ -13,7 +15,7 @@ if not os.path.exists(FIG_DIR):
     os.mkdir(FIG_DIR)
 
 d = 3
-gt = np.array([0.5574, 0.4424, 0.2436])
+gt = np.array([S1, S2, S3])
 
 
 # Plot formatting
@@ -40,28 +42,7 @@ floodgate = []
 panin = []
 spf_surrogate = []
 
-noise_vals = ["0.5", "0.25", "0.1", "0.01", "0.001", "0.0001", "0.0"]
-
-# Floodgate
-for s in noise_vals:
-    data_dir = DATA_DIR / "floodgate" / s
-    floodgate.append(
-        [np.load(data_dir / fp) for fp in os.listdir(data_dir)]
-    )
-floodgate = np.array(floodgate)
-floodgate_mean = np.mean(floodgate, axis=1)
-floodgate_cov = np.mean((floodgate[:,:,:,0] < gt) * (floodgate[:,:,:,1] > gt), axis=1)
-
-
-mse_vals = [
-    analytical_mse(1 + float(n), 7 + 2 * float(n), 0.1 - 0.5 * float(n)) + 1e-6 for n in noise_vals
-]
-
-for i in range(d):
-    ax[0,i].plot(mse_vals, floodgate_mean[:,i,0], color="green", ls="-", lw=lw, label="Floodgate")
-    ax[0,i].plot(mse_vals, floodgate_mean[:,i,1], color="green", ls="-", lw=lw)
-    ax[1,i].plot(mse_vals, floodgate_cov[:,i], color="green", ls="-", lw=lw)
-
+noise_vals = ["0.5", "0.25", "0.1", "0.01", "0.001", "0.0005", "0.0"]
 
 # Surrogate SPF
 for s in noise_vals:
@@ -72,6 +53,35 @@ for s in noise_vals:
 spf_surrogate = np.array(spf_surrogate)
 spf_surrogate_mean = np.mean(spf_surrogate, axis=1)
 spf_surrogate_cov = np.mean((spf_surrogate[:,:,:,0] < gt) * (spf_surrogate[:,:,:,1] > gt), axis=1)
+
+# Floodgate
+for s in noise_vals:
+    data_dir = DATA_DIR / "floodgate" / s
+    floodgate.append(
+        [np.load(data_dir / fp) for fp in os.listdir(data_dir)]
+    )
+
+floodgate = np.array(floodgate)
+floodgate_mean = np.mean(floodgate, axis=1)
+floodgate_cov = np.mean((floodgate[:,:,:,0] < gt) * (floodgate[:,:,:,1] > gt), axis=1)
+# print(np.mean(floodgate[:,:,:,0] < gt, axis=1))
+# print(np.mean(floodgate[:,:,:,1] > gt, axis=1))
+
+mse_vals = []
+for n in noise_vals:
+    noise = float(n)
+    fstar = Ishigami()
+    f = Ishigami(1 + noise, 7 + 2 * noise, 0.1 - 0.5 * noise)
+    mse_vals.append(analytical_mse(fstar, f))
+
+
+for i in range(d):
+    ax[0,i].plot(mse_vals, floodgate_mean[:,i,0], color="green", ls="-", lw=lw, label="Floodgate")
+    ax[0,i].plot(mse_vals, floodgate_mean[:,i,1], color="green", ls="-", lw=lw)
+    ax[1,i].plot(mse_vals, floodgate_cov[:,i], color="green", ls="-", lw=lw)
+
+
+
 
 for i in range(d):
     ax[0,i].plot(mse_vals, spf_surrogate_mean[:,i,0], color="orange", ls="-", lw=lw, label="SPF $f$")
