@@ -82,9 +82,9 @@ class Ishigami(Surrogate):
 
     def predict(self, X):
         return (
-            self.a * np.sin(X[:,0]) +
-            self.b * np.sin(X[:,1])**2 +
-            self.c * X[:,2]**4 * np.sin(X[:,0])
+            self.a * X[:, 0] +
+            self.b * (X[:, 1]**2) +
+            self.c * (X[:, 2]**4) * X[:, 0]
         )
 
 

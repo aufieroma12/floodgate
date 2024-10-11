@@ -1,8 +1,9 @@
 import numpy as np
 from scipy.stats import norm
-from src.util import get_knockoffs
+from src.util import get_knockoffs_normal
 
-def floodgate(inputs, f, xmin, xmax, K=50, alpha=0.05, batch_size=1, fstar=None, Y=None, ind=None):
+
+def floodgate(inputs, f, mu, Sigma, K=50, alpha=0.05, batch_size=1, fstar=None, Y=None, ind=None):
     if fstar is None and Y is None:
         raise ValueError("Must provide either fstar of a set of evaluations from it.")
     elif Y is None:
@@ -37,7 +38,7 @@ def floodgate(inputs, f, xmin, xmax, K=50, alpha=0.05, batch_size=1, fstar=None,
     V_bar = np.mean(V)
     
     for X_ind in ind:
-        knockoffs = get_knockoffs(inputs, X_ind, xmin, xmax, K)
+        knockoffs = get_knockoffs_normal(inputs, X_ind, mu, Sigma, K)
         F = f.predict(knockoffs).reshape(n, K)
         F = np.mean(F, axis=1)
         
@@ -59,7 +60,7 @@ def floodgate(inputs, f, xmin, xmax, K=50, alpha=0.05, batch_size=1, fstar=None,
 
 
 
-def SPF(inputs, fstar, xmin, xmax, alpha=0.05, batch_size=1, Y=None, ind=None):
+def SPF(inputs, fstar, mu, Sigma, alpha=0.05, batch_size=1, Y=None, ind=None):
     if Y is None:
         Y = fstar.predict(inputs)
 
@@ -85,7 +86,7 @@ def SPF(inputs, fstar, xmin, xmax, alpha=0.05, batch_size=1, Y=None, ind=None):
 
     for X_ind in ind:
         # Get surrogate predictions for knockoffs
-        knockoffs = get_knockoffs(inputs, X_ind, xmin, xmax, 1)
+        knockoffs = get_knockoffs_normal(inputs, X_ind, mu, Sigma, 1)
         F = fstar.predict(knockoffs)
         
         # Bounds
@@ -190,7 +191,7 @@ def panin_bound(Mjf, Vf, M, V, z):
 
 
 
-def combined_surrogate_methods(inputs, f, xmin, xmax, K=50, alpha=0.05, batch_size=1, fstar=None, Y=None, ind=None):
+def combined_surrogate_methods(inputs, f, mu, Sigma, K=50, alpha=0.05, batch_size=1, fstar=None, Y=None, ind=None):
     if fstar is None and Y is None:
         raise ValueError("Must provide either fstar of a set of evaluations from it.")
     elif Y is None:
@@ -229,11 +230,11 @@ def combined_surrogate_methods(inputs, f, xmin, xmax, K=50, alpha=0.05, batch_si
     V_bar = np.mean(V)
     
     for X_ind in ind:
-        knockoffs = get_knockoffs(inputs, X_ind, xmin, xmax, K)
+        knockoffs = get_knockoffs_normal(inputs, X_ind, mu, Sigma, K)
         F = f.predict(knockoffs).reshape(n, K)
         F1 = F[:,0]
         F = np.mean(F, axis=1)
-        
+
         # Upper bound floodgate
         Mj = ((Y - F) ** 2) - ((Y_preds - F) ** 2 / (K + 1))
         Mj = np.mean(Mj.reshape(-1, batch_size), axis=1)
