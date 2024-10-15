@@ -4,6 +4,7 @@ from pathlib import Path
 
 import numpy as np
 
+from src.analytical import a, b, c, exp_poly
 from src.sensitivity import combined_surrogate_methods
 from src.surrogate import Ishigami
 
@@ -18,28 +19,23 @@ DATA_DIR = Path(__file__).parents[1] / "data_big"
 OUTPUT_DIR = DATA_DIR / "analysis"
 
 mu = np.array([0, 0, 0])
-Sigma = np.array([[1, 0.3, 0.8], [0.3, 1, 0.5], [0.8, 0.5, 1]])
+Sigma = np.array([[1, a, b], [a, 1, c], [b, c, 1]])
 
 
 def _create_input_sample(n):
     return np.random.multivariate_normal(mu, Sigma, n)
 
 
-def analytical_mse(fstar, f):
-    # a_diff = a - 1
-    # b_diff = b - 7
-    # c_diff = c - 0.1
-    # unnormalized = (
-    #     4 * (a_diff ** 2) * (np.pi ** 3) +
-    #     (4 / 9) * (c_diff ** 2) * (np.pi ** 11) +
-    #     (8 / 5) * a_diff * c_diff * (np.pi ** 7) +
-    #     3 * (b_diff ** 2) * (np.pi ** 3)
-    # )
-    # return unnormalized / ((2 * np.pi) ** 3)
-    X = _create_input_sample(10000)
-    y = fstar.predict(X)
-    y_hat = f.predict(X)
-    return np.mean((y - y_hat) ** 2)
+def analytical_mse(alpha_, beta_, gamma_):
+    a_diff = alpha_ - 1
+    b_diff = beta_ - 7
+    c_diff = gamma_ - 0.1
+    return (
+        a_diff**2 +
+        3*b_diff**2 +
+        c_diff**2*exp_poly(2, 8, b) +
+        2*a_diff*c_diff*exp_poly(2, 4, b)
+    )
 
 
 if __name__ == "__main__":
@@ -70,7 +66,7 @@ if __name__ == "__main__":
     fstar = Ishigami()
     f = Ishigami(1 + noise, 7 + 2 * noise, 0.1 - 0.5 * noise)
 
-    print(f"noise: {noise}, MSE: {analytical_mse(fstar, f):.5f}")
+    print(f"noise: {noise}, MSE: {analytical_mse(f.alpha, f.beta, f.gamma):.5f}")
 
     for i in range(1000):
         if i % 100 == 0:
@@ -93,7 +89,7 @@ if __name__ == "__main__":
         np.random.seed(Random_seeds["Ishigami_analysis"] + i)
 
         floodgate_results, spf_results, panin_results = combined_surrogate_methods(
-            X, f, mu, Sigma, Y=y, K=5
+            X, f, mu, Sigma, Y=y, K=50
         )
 
         np.save(FLOODGATE_OUTPUT_DIR / f"{i}.npy", np.array(floodgate_results))
