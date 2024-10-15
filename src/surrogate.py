@@ -10,6 +10,7 @@ from safepython.model_execution import model_execution
 from safepython import HyMod
 
 from config import Hymod_inputs
+from src.analytical import alpha, beta, gamma
 
 
 def batched(batch_size):
@@ -71,20 +72,20 @@ class Hymod(Surrogate):
 
 class Ishigami(Surrogate):
 
-    def __init__(self, a = 1, b = 7, c = 0.1):
+    def __init__(self, alpha=alpha, beta=beta, gamma=gamma):
         super().__init__(None)
-        self.a = a
-        self.b = b
-        self.c = c
+        self.alpha = alpha
+        self.beta = beta
+        self.gamma = gamma
 
     def fit(self, X, y):
         pass
 
     def predict(self, X):
         return (
-            self.a * X[:, 0] +
-            self.b * (X[:, 1]**2) +
-            self.c * (X[:, 2]**4) * X[:, 0]
+            self.alpha * X[:, 0] +
+            self.beta * (X[:, 1]**2) +
+            self.gamma * (X[:, 2]**4) * X[:, 0]
         )
 
 

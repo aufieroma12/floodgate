@@ -6,7 +6,7 @@ import os
 
 from ishigami.analysis.surrogate_methods import analytical_mse
 from src.analytical import S1, S2, S3
-from src.surrogate import Ishigami
+from src.analytical import alpha, beta, gamma
 
 FIG_DIR = Path(__file__).parents[1] / "figs"
 DATA_DIR = Path(__file__).parents[1] / "ishigami" / "data_big" / "analysis"
@@ -69,17 +69,15 @@ floodgate_cov = np.mean((floodgate[:,:,:,0] < gt) * (floodgate[:,:,:,1] > gt), a
 mse_vals = []
 for n in noise_vals:
     noise = float(n)
-    fstar = Ishigami()
-    f = Ishigami(1 + noise, 7 + 2 * noise, 0.1 - 0.5 * noise)
-    mse_vals.append(analytical_mse(fstar, f))
+    mse_vals.append(
+        analytical_mse(alpha + noise, beta + 2 * noise, gamma - 0.5 * noise)
+    )
 
 
 for i in range(d):
     ax[0,i].plot(mse_vals, floodgate_mean[:,i,0], color="green", ls="-", lw=lw, label="Floodgate")
     ax[0,i].plot(mse_vals, floodgate_mean[:,i,1], color="green", ls="-", lw=lw)
     ax[1,i].plot(mse_vals, floodgate_cov[:,i], color="green", ls="-", lw=lw)
-
-
 
 
 for i in range(d):
@@ -128,4 +126,4 @@ ax[1,1].xaxis.labelpad = 15
 fig.subplots_adjust(wspace=0.045, hspace=0.025)
 
 # Save plots
-plt.savefig(FIG_DIR / "Ishigami_bounds.png", bbox_inches="tight")
+plt.savefig(FIG_DIR / "analytical_function_bounds.png", bbox_inches="tight")
