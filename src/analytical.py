@@ -54,9 +54,12 @@ d = b - a * c
 e = c - a * b
 Ex2mu6 = (f**6) * (105*(d**6) + 6*(d**5)*e*exp_poly(7, 1) + 15*(d**4)*(e**2)*exp_poly(6, 2) + 20*(d**3)*(e**3)*exp_poly(5, 3) + 15*(d**2)*(e**4)*exp_poly(4, 4) + 6*d*(e**5)*exp_poly(3, 5) + (e**6)*exp_poly(2, 6))
 Ex2mu4 = (f**4) * (15*(d**4) + 4*(d**3)*e*exp_poly(5, 1) + 6*(d**2)*(e**2)*exp_poly(4, 2) + 4*d*(e**3)*exp_poly(3, 3) + (e**4)*exp_poly(2, 4))
-Ex2mu2 = (f**2) * (3*(d**2) + 18*a*d*e + (e**2)*exp_poly(2, 2))
+Ex2mu2 = (f**2) * (3*(d**2) + 6*a*d*e + (e**2)*exp_poly(2, 2))
 D3 = (gamma**2) * (16*Ex2mu6*sig2_3 + 168*Ex2mu4*(sig2_3**2) + 384*Ex2mu2*(sig2_3**3) + 96*(sig2_3**4))
 
 S1 = D1/VAR_F
 S2 = D2/VAR_F
 S3 = D3/VAR_F
+
+if __name__ == "__main__":
+    print(S1, S2, S3)

@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 import os
 
 from ishigami.analysis.surrogate_methods import analytical_mse
-from src.analytical import S1, S2, S3, VAR_F
+from src.analytical import S1, S2, S3
 from src.surrogate import Ishigami
 
 FIG_DIR = Path(__file__).parents[1] / "figs"
@@ -64,8 +64,7 @@ for s in noise_vals:
 floodgate = np.array(floodgate)
 floodgate_mean = np.mean(floodgate, axis=1)
 floodgate_cov = np.mean((floodgate[:,:,:,0] < gt) * (floodgate[:,:,:,1] > gt), axis=1)
-# print(np.mean(floodgate[:,:,:,0] < gt, axis=1))
-# print(np.mean(floodgate[:,:,:,1] > gt, axis=1))
+
 
 mse_vals = []
 for n in noise_vals:
