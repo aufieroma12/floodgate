@@ -32,7 +32,7 @@ class Distribution(ABC):
         knockoffs = np.zeros(((n * k), d))
         for i in range(n):
             knockoffs[(i * k):((i + 1) * k), Z_ind] = inputs[i, Z_ind]
-        knockoffs[:, idx] = self._conditional_sample(knockoffs, idx)
+        knockoffs[:, idx] = self.conditional_sample(knockoffs, idx)
 
         if isinstance(inputs, tuple):
             for i in range(n):
@@ -40,7 +40,6 @@ class Distribution(ABC):
             knockoffs = (knockoffs, meta_new)
 
         return knockoffs
-
 
 
 class IndependentUniform(Distribution):
