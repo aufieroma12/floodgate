@@ -6,6 +6,6 @@
 **/data/analysis/
 *.egg-info
 Hymod/data/outputs/
-ishigami/data/
+analytical_polynomial/data/
 .venv
 

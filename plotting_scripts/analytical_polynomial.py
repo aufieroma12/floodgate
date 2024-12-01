@@ -4,12 +4,10 @@ import numpy as np
 from matplotlib import pyplot as plt
 import os
 
-from ishigami.analysis.surrogate_methods import analytical_mse
-from src.analytical import S1, S2, S3
-from src.analytical import alpha, beta, gamma
+from src.analytical import S1, S2, S3, alpha, beta, gamma, analytical_mse
 
 FIG_DIR = Path(__file__).parents[1] / "figs"
-DATA_DIR = Path(__file__).parents[1] / "ishigami" / "data" / "analysis"
+DATA_DIR = Path(__file__).parents[1] / "analytical_polynomial" / "data" / "analysis"
 
 if not os.path.exists(FIG_DIR):
     os.mkdir(FIG_DIR)
