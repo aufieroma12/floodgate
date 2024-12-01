@@ -3,6 +3,7 @@ from time import time
 
 import numpy as np
 
+from src.distribution import IndependentUniform
 from src.sensitivity import combined_surrogate_methods
 from src.surrogate import KelpNN
 from config import CBMZ_inputs, Random_seeds
@@ -32,6 +33,7 @@ X = np.load(DATA_DIR + 'conc_inputs.npy')
 met = np.load(DATA_DIR + 'met_inputs.npy')[:,:n_steps,:]
 y = np.load(DATA_DIR + 'outputs.npy')
 
+unif = IndependentUniform(xmin, xmax)
 f = KelpNN(CBMZ_inputs['MODEL_PATH'])
 
 floodgate_results = []
@@ -45,7 +47,7 @@ for n in n_batches:
     y_test = y[:n]
 
     t1 = time()
-    flood, spf, panin = combined_surrogate_methods((X_test, met_test), f, xmin, xmax, Y=y_test, batch_size=batch_size)
+    flood, spf, panin = combined_surrogate_methods((X_test, met_test), f, unif, Y=y_test, batch_size=batch_size)
     print(f'  n={n}: {time() - t1: .3f} seconds')
 
     floodgate_results.append(flood)

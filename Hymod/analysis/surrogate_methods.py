@@ -5,6 +5,9 @@ import os
 import joblib
 
 import warnings
+
+from src.distribution import IndependentUniform
+
 warnings.filterwarnings('ignore')
 
 from src.sensitivity import combined_surrogate_methods
@@ -42,6 +45,7 @@ os.makedirs(OUTPUT_DIR.format('floodgate', train_size), exist_ok=True)
 os.makedirs(OUTPUT_DIR.format('spf_surrogate', train_size), exist_ok=True)
 os.makedirs(OUTPUT_DIR.format('panin', train_size), exist_ok=True)
 
+unif = IndependentUniform(xmin, xmax)
 fstar = Hymod()
 f = joblib.load(MODEL_PATH)
 
@@ -54,7 +58,7 @@ for i in range(start, end):
         print("  Data read from file.\n")
     else:
         np.random.seed(Random_seeds["Hymod_inputs"] + i)
-        X = np.random.rand(n_max, d) @ np.diag(xmax - xmin) + np.ones((n_max, d)) @ np.diag(xmin)
+        X = unif.joint_sample(n_max)
         t1 = time()
         y = fstar.predict(X) 
         print(f"  Total model evalutations ({n_max}): {(time() - t1): .2f} seconds")
@@ -73,7 +77,7 @@ for i in range(start, end):
         y_test = y[:N]
         
         t1 = time()
-        flood, spf, panin = combined_surrogate_methods(X_test, f, xmin, xmax, Y=y_test)
+        flood, spf, panin = combined_surrogate_methods(X_test, f, unif, Y=y_test)
         print(f'    N={N}: {time() - t1: .3f} seconds')
         
         floodgate_results.append(flood)

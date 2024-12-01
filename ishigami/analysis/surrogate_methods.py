@@ -5,6 +5,7 @@ from pathlib import Path
 import numpy as np
 
 from src.analytical import a, b, c, alpha, beta, gamma, analytical_mse
+from src.distribution import MultivariateNormal
 from src.sensitivity import combined_surrogate_methods
 from src.surrogate import Surrogate
 from config import Random_seeds
@@ -19,6 +20,7 @@ Sigma = np.array([[1, a, b], [a, 1, c], [b, c, 1]])
 
 
 class PolynomialFunction(Surrogate):
+
     def __init__(self, alpha=alpha, beta=beta, gamma=gamma):
         super().__init__(None)
         self.alpha = alpha
@@ -34,10 +36,6 @@ class PolynomialFunction(Surrogate):
             self.beta * (X[:, 1]**2) +
             self.gamma * (X[:, 2]**4) * X[:, 0]
         )
-
-
-def _create_input_sample(n):
-    return np.random.multivariate_normal(mu, Sigma, n)
 
 
 if __name__ == "__main__":
@@ -65,6 +63,7 @@ if __name__ == "__main__":
     os.makedirs(SPF_SURROGATE_OUTPUT_DIR, exist_ok=True)
     os.makedirs(PANIN_OUTPUT_DIR, exist_ok=True)
 
+    mvn = MultivariateNormal(mu, Sigma)
     fstar = PolynomialFunction()
     f = PolynomialFunction(alpha + noise, beta + 2 * noise, gamma - 0.5 * noise)
 
@@ -79,7 +78,7 @@ if __name__ == "__main__":
             y = data[:, -1]
         else:
             np.random.seed(Random_seeds["analytical_polynomial_inputs"] + i)
-            X = _create_input_sample(N)
+            X = mvn.joint_sample(N)
             y = fstar.predict(X)
 
             if args.save_data:
@@ -88,7 +87,7 @@ if __name__ == "__main__":
         np.random.seed(Random_seeds["analytical_polynomial_analysis"] + i)
 
         floodgate_results, spf_results, panin_results = combined_surrogate_methods(
-            X, f, mu, Sigma, Y=y, K=50
+            X, f, mvn, Y=y, K=50
         )
 
         np.save(FLOODGATE_OUTPUT_DIR / f"{i}.npy", np.array(floodgate_results))
