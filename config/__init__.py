@@ -9,8 +9,8 @@ Random_seeds = {
     "Hymod_analysis": 4000,
     "Ishigami_train": 5000,
     "Ishigami_validation": 6000,
-    "Ishigami_inputs": 7000,
-    "Ishigami_analysis": 8000,
+    "analytical_polynomial_inputs": 7000,
+    "analytical_polynomial_analysis": 8000,
     "Hymod_gt": 9000,
 }
 

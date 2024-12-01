@@ -4,38 +4,40 @@ from pathlib import Path
 
 import numpy as np
 
-from src.analytical import a, b, c, exp_poly
+from src.analytical import a, b, c, alpha, beta, gamma, analytical_mse
 from src.sensitivity import combined_surrogate_methods
-from src.surrogate import Ishigami
-
-from config import Random_seeds, Ishigami_inputs
+from src.surrogate import Surrogate
+from config import Random_seeds
 
 N = int(1e6)
-xmin = Ishigami_inputs["min"]
-xmax = Ishigami_inputs["max"]
-d = xmax.shape[0]
 
-DATA_DIR = Path(__file__).parents[1] / "data_big"
+DATA_DIR = Path(__file__).parents[1] / "data"
 OUTPUT_DIR = DATA_DIR / "analysis"
 
 mu = np.array([0, 0, 0])
 Sigma = np.array([[1, a, b], [a, 1, c], [b, c, 1]])
 
 
+class PolynomialFunction(Surrogate):
+    def __init__(self, alpha=alpha, beta=beta, gamma=gamma):
+        super().__init__(None)
+        self.alpha = alpha
+        self.beta = beta
+        self.gamma = gamma
+
+    def fit(self, X, y):
+        pass
+
+    def predict(self, X):
+        return (
+            self.alpha * X[:, 0] +
+            self.beta * (X[:, 1]**2) +
+            self.gamma * (X[:, 2]**4) * X[:, 0]
+        )
+
+
 def _create_input_sample(n):
     return np.random.multivariate_normal(mu, Sigma, n)
-
-
-def analytical_mse(alpha_, beta_, gamma_):
-    a_diff = alpha_ - 1
-    b_diff = beta_ - 7
-    c_diff = gamma_ - 0.1
-    return (
-        a_diff**2 +
-        3*b_diff**2 +
-        c_diff**2*exp_poly(2, 8, b) +
-        2*a_diff*c_diff*exp_poly(2, 4, b)
-    )
 
 
 if __name__ == "__main__":
@@ -44,7 +46,7 @@ if __name__ == "__main__":
         "--noise",
         type=float,
         required=True,
-        help="Noise to add to the Ishigami coefficients for the surrogate.",
+        help="Noise to add to the polynomial coefficients for the surrogate.",
     )
     parser.add_argument(
         "--save-data",
@@ -63,15 +65,12 @@ if __name__ == "__main__":
     os.makedirs(SPF_SURROGATE_OUTPUT_DIR, exist_ok=True)
     os.makedirs(PANIN_OUTPUT_DIR, exist_ok=True)
 
-    fstar = Ishigami()
-    f = Ishigami(1 + noise, 7 + 2 * noise, 0.1 - 0.5 * noise)
+    fstar = PolynomialFunction()
+    f = PolynomialFunction(alpha + noise, beta + 2 * noise, gamma - 0.5 * noise)
 
     print(f"noise: {noise}, MSE: {analytical_mse(f.alpha, f.beta, f.gamma):.5f}")
 
     for i in range(1000):
-        if i % 100 == 0:
-            print(f"noise: {noise}, iteration: {i}")
-
         data_path = DATA_DIR / "outputs" / f"{i}.npy"
         os.makedirs(data_path.parent, exist_ok=True)
         if os.path.exists(data_path):
@@ -79,14 +78,14 @@ if __name__ == "__main__":
             X = data[:, :-1]
             y = data[:, -1]
         else:
-            np.random.seed(Random_seeds["Ishigami_inputs"] + i)
+            np.random.seed(Random_seeds["analytical_polynomial_inputs"] + i)
             X = _create_input_sample(N)
             y = fstar.predict(X)
 
             if args.save_data:
                 np.save(data_path, np.concatenate((X, y.reshape(-1, 1)), axis=1))
 
-        np.random.seed(Random_seeds["Ishigami_analysis"] + i)
+        np.random.seed(Random_seeds["analytical_polynomial_analysis"] + i)
 
         floodgate_results, spf_results, panin_results = combined_surrogate_methods(
             X, f, mu, Sigma, Y=y, K=50

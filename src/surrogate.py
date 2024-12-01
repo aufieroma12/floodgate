@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 import numpy as np
-from sklearn.linear_model import LinearRegression, Lasso, LassoCV
+from sklearn.linear_model import LinearRegression, LassoCV
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.kernel_ridge import KernelRidge
 from sklearn.neighbors import KNeighborsRegressor as KNN
@@ -10,7 +10,6 @@ from safepython.model_execution import model_execution
 from safepython import HyMod
 
 from config import Hymod_inputs
-from src.analytical import alpha, beta, gamma
 
 
 def batched(batch_size):
@@ -27,41 +26,43 @@ def batched(batch_size):
             else:
                 y_preds = []
                 for i in range(n // batch_size + (n % batch_size > 0)):
-                    X_batch = X[i*batch_size:(i+1)*batch_size]
+                    X_batch = X[i * batch_size:(i + 1) * batch_size]
                     if isinstance(inputs, tuple):
-                        met_batch = met[i*batch_size:(i+1)*batch_size]
+                        met_batch = met[i * batch_size:(i + 1) * batch_size]
                         X_batch = (X_batch, met_batch)
                     y_preds.append(f(args[0], X_batch))
                 return np.concatenate(y_preds, axis=0)
-        return wrapper
-    return f_batched
 
+        return wrapper
+
+    return f_batched
 
 
 class Surrogate(ABC):
     def __init__(self, model):
-        self.model = model    
-    
+        self.model = model
+
     @abstractmethod
     def fit(self, X, y):
-        raise NotImplementedError("self.fit() not implemented")
-        
+        """Train the surrogate."""
+
     @abstractmethod
     def predict(self, X):
-        raise NotImplementedError("self.predict() not implemented")
-
+        """Predict on an input sample."""
 
 
 class Hymod(Surrogate):
     def __init__(self, obsPath=Hymod_inputs["FORCING_PATH"]):
         # Observed inputs and outputs
         data = np.genfromtxt(obsPath, comments='%')
-        rain = data[0:365, 0] # 2-year simulation
+        rain = data[0:365, 0]  # 2-year simulation
         evap = data[0:365, 1]
         flow = data[0:365, 2]
         warmup = 30
 
-        super().__init__(lambda X: model_execution(HyMod.hymod_nse, X, rain, evap, flow, warmup)[:,0])
+        super().__init__(
+            lambda X: model_execution(HyMod.hymod_nse, X, rain, evap, flow, warmup)[:,
+                      0])
 
     def fit(self, X, y):
         pass
@@ -70,35 +71,15 @@ class Hymod(Surrogate):
         return self.model(X)
 
 
-class Ishigami(Surrogate):
-
-    def __init__(self, alpha=alpha, beta=beta, gamma=gamma):
-        super().__init__(None)
-        self.alpha = alpha
-        self.beta = beta
-        self.gamma = gamma
-
-    def fit(self, X, y):
-        pass
-
-    def predict(self, X):
-        return (
-            self.alpha * X[:, 0] +
-            self.beta * (X[:, 1]**2) +
-            self.gamma * (X[:, 2]**4) * X[:, 0]
-        )
-
-
 class LinReg(Surrogate):
     def __init__(self):
         super().__init__(LinearRegression())
-    
+
     def fit(self, X, y):
         self.model.fit(X, y)
-        
+
     def predict(self, X):
         return self.model.predict(X)
-    
 
 
 class PolyReg(Surrogate):
@@ -106,41 +87,43 @@ class PolyReg(Surrogate):
         super().__init__(LinearRegression(fit_intercept=False))
         self.degree = degree
         self.poly = PolynomialFeatures(degree)
-        
+
     def fit(self, X, y):
         X = self.poly.fit_transform(X)
         self.model.fit(X, y)
-        
+
     def predict(self, X):
         X = self.poly.transform(X)
         return self.model.predict(X)
-    
 
 
 class PolyRegLASSOcv(Surrogate):
     def __init__(self, degree):
-        super().__init__(LassoCV(fit_intercept=False, alphas=np.logspace(-10, 5, 100), max_iter=2500))
+        super().__init__(
+            LassoCV(fit_intercept=False, alphas=np.logspace(-10, 5, 100), max_iter=2500)
+        )
         self.degree = degree
         self.poly = PolynomialFeatures(degree)
-    
+
     def fit(self, X, y):
         X = self.poly.fit_transform(X)
-        self.model.fit(X, y)        
+        self.model.fit(X, y)
         self.alpha_ = self.model.alpha_
         self.coef_ = self.model.coef_
         self.alphas_ = self.model.alphas_
-        
+
     def predict(self, X):
         X = self.poly.transform(X)
         return self.model.predict(X)
-        
 
 
 class KRRcv(Surrogate):
     def __init__(self, alphas, gammas):
         base_model = KernelRidge(kernel='rbf')
         parameters = {'alpha': alphas, 'gamma': gammas}
-        super().__init__(GridSearchCV(base_model, parameters, scoring='neg_mean_squared_error'))
+        super().__init__(
+            GridSearchCV(base_model, parameters, scoring='neg_mean_squared_error')
+        )
 
     def fit(self, X, y):
         self.model.fit(X, y)
@@ -148,7 +131,6 @@ class KRRcv(Surrogate):
     @batched(int(5e4))
     def predict(self, X):
         return self.model.predict(X)
-    
 
 
 class KNNcv(Surrogate):
@@ -156,7 +138,9 @@ class KNNcv(Surrogate):
         base_model = KNN()
         weights = ['uniform', 'distance']
         parameters = {'n_neighbors': neighbors, 'weights': weights}
-        super().__init__(GridSearchCV(base_model, parameters, scoring='neg_mean_squared_error'))
+        super().__init__(
+            GridSearchCV(base_model, parameters, scoring='neg_mean_squared_error')
+        )
 
     def fit(self, X, y):
         self.model.fit(X, y)

@@ -16,6 +16,7 @@ EXPECTATIONS = [
     [(9, 6), (0, 0), (45, 60)],
 ]
 
+
 def exp_poly(p1, p2, rho=a):
     if p1 > p2:
         p1, p2 = p2, p1
@@ -34,6 +35,18 @@ def exp_poly(p1, p2, rho=a):
         return 9 + 72 * (rho**2) + 24 * (rho**4)
 
     raise ValueError("Invalid input")
+
+
+def analytical_mse(alpha_, beta_, gamma_):
+    a_diff = alpha_ - alpha
+    b_diff = beta_ - beta
+    c_diff = gamma_ - gamma
+    return (
+        a_diff**2 +
+        3*b_diff**2 +
+        c_diff**2*exp_poly(2, 8, b) +
+        2*a_diff*c_diff*exp_poly(2, 4, b)
+    )
 
 
 VAR_F = alpha**2 + 2*beta**2 + (gamma**2)*(105 + 840*(b**2)) + 2*alpha*gamma*(3 + 12*(b**2))
@@ -60,8 +73,6 @@ D3 = (gamma**2) * (16*Ex2mu6*sig2_3 + 168*Ex2mu4*(sig2_3**2) + 384*Ex2mu2*(sig2_
 S1 = D1/VAR_F
 S2 = D2/VAR_F
 S3 = D3/VAR_F
-
-
 
 
 if __name__ == "__main__":
